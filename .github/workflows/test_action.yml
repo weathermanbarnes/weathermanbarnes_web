@@ -45,4 +45,4 @@ jobs:
           username: ${{secrets.GADI_USER}}
           key: ${{secrets.GADI_KEY}}
           script: |
-            mkdir -p $GADI_REPO_PATH
+            mkdir -p "\home\565\mb0427\MonashWeb\TEST"
