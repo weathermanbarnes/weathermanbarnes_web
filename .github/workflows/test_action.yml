@@ -22,4 +22,4 @@ jobs:
           username: ${{secrets.GADI_USER}}
           key: ${{secrets.GADI_KEY}}
           script: |
-            mkdir -p $GADI_REPO_PATH"\TEST_GITHUB"
+            mkdir -p $GADI_REPO_PATH
