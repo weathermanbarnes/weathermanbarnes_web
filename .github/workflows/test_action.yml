@@ -13,16 +13,13 @@ jobs:
         env:
           HOST: gadi.nci.org.au
           TARGET: ${{secrets.GADI_REPO_PATH}}
-          KEY: ${{secrets.DEPLOY_KEY}}
+          KEY: ${{secrets.GADI_KEY}}
           USER: ${{secrets.GADI_USER}}
       - name: Create Admin dirs on Gadi
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: gadi.nci.org.au
           username: ${{secrets.GADI_USER}}
-          key: ${{secrets.DEPLOY_KEY}}
+          key: ${{secrets.GADI_KEY}}
           script: |
-            source ${{secrets.GADI_REPO_PATH}}/scripts/install_config.sh
-            source ${{secrets.GADI_REPO_PATH}}/scripts/functions.sh
-            mkdir -p $ADMIN_DIR $JOB_LOG_DIR $BUILD_STAGE_DIR
-            set_admin_perms $ADMIN_DIR $JOB_LOG_DIR $BUILD_STAGE_DIR
+            mkdir -p $GADI_REPO_PATH"\TEST_GITHUB"
