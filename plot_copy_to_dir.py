@@ -3,8 +3,10 @@ import shutil
 
 #datadir='/home/ubuntu/testing/'
 #webdir='/home/ubuntu/testing/web/v1/data'
-datadir='/Users/mbar0087/Documents/Monash Weather Web/'
-webdir='/Users/mbar0087/Documents/Monash Weather Web/v1/data'
+#datadir='/Users/mbar0087/Documents/Monash Weather Web/'
+datadir='/g/data/w40/mb0427/MonashWeb/forecasts/'
+webdir='/home/565/mb0427/MonashWeb/monash_weather_web/data/'
+#webdir='/Users/mbar0087/Documents/Monash Weather Web/v1/data'
 
 model='GFS'
 domains=['IndianOcean','Australia','PacificOcean','SouthAmerica',
@@ -18,7 +20,7 @@ plottypes=['UpperLevel',
             'IPV-350K',
             'IrrotPV']
 
-indir=datadir+'/'+model+'/'+'forecasts/'
+indir=datadir#+'/'+model+'/'+'forecasts/'
 
 files = os.listdir(indir)
 for type in plottypes:
