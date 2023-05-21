@@ -24,6 +24,7 @@ import wind_spd_dir as wind
 import ascii_functions as asc
 from crop import crop
 import pykdtree
+import gc
 
 def get_domain_settings(name):
     if name=='Australia':
@@ -207,7 +208,7 @@ def plot_precip6h(inpath,outpath,dt,init_dt,fignum,data,name='Australia',cbar='o
     crop(outfile)
     #plt.show()
     #plt.gcf()
-    #plt.close() 
+    plt.close('all') 
 
 def plot_PTe(inpath,outpath,dt,init_dt,fignum,data,name='Australia',**kwargs):
     
@@ -268,6 +269,7 @@ def plot_PTe(inpath,outpath,dt,init_dt,fignum,data,name='Australia',**kwargs):
     plt.savefig(outfile, dpi=150)
     crop(outfile)
     #plt.show()
+    plt.close('all') 
     
     
 def plot_DT(inpath,outpath,dt,init_dt,fignum,data,name='Australia',**kwargs):
@@ -325,6 +327,7 @@ def plot_DT(inpath,outpath,dt,init_dt,fignum,data,name='Australia',**kwargs):
     crop(outfile)
     #plt.show()
     #plt.clf()
+    plt.close('all') 
 
 def plot_upper(inpath,outpath,dt,init_dt,fignum,data,name='Australia',**kwargs):
     
@@ -388,6 +391,7 @@ def plot_upper(inpath,outpath,dt,init_dt,fignum,data,name='Australia',**kwargs):
     crop(outfile)
     #plt.show()
     #plt.clf()
+    plt.close('all') 
     
 def plot_irrotPV(inpath,outpath,dt,init_dt,fignum,data,name='Australia',**kwargs):
     
@@ -462,6 +466,7 @@ def plot_irrotPV(inpath,outpath,dt,init_dt,fignum,data,name='Australia',**kwargs
     crop(outfile)
     #plt.show()
     #plt.clf()
+    plt.close('all') 
     
 def plot_IVT(inpath,outpath,dt,init_dt,fignum,data,name='Australia',**kwargs):
     
@@ -520,6 +525,7 @@ def plot_IVT(inpath,outpath,dt,init_dt,fignum,data,name='Australia',**kwargs):
     crop(outfile)
     #plt.clf()
     #plt.show()
+    plt.close('all') 
     
 def plot_IPV(outpath,dt,init_dt,fignum,plot_level,data,name='Australia',**kwargs):
     
@@ -579,6 +585,7 @@ def plot_IPV(outpath,dt,init_dt,fignum,plot_level,data,name='Australia',**kwargs
     crop(outfile)
     #plt.clf()
     #plt.show()
+    plt.close('all') 
 
 
 

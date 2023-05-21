@@ -1,12 +1,13 @@
 import sys
 # insert at 1, 0 is the script path (or '' in REPL)
-sys.path.insert(1, '/Users/mbar0087/Documents/Monash Weather Web/functions')
+sys.path.insert(1, '/home/565/mb0427/MonashWeb/functions')
 import plot_GFS_functions as functions
 import sort_GFS_data as sort_GFS_data
 from crop import crop
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 import argparse
+import gc
 
 # this tells the code which year to run this for, so that multiple versions of the script can be submitted to gadi
 # parser = argparse.ArgumentParser()
@@ -16,7 +17,7 @@ import argparse
 # INDATEstr = args.date
 # RUN = args.run
 
-INDATEstr='20230505'
+INDATEstr='20230520'
 RUN=12
 
 RUNstr=str(RUN).zfill(2)
@@ -24,8 +25,8 @@ NOW=datetime.strptime(INDATEstr,'%Y%m%d')
 init_dt1=NOW+relativedelta(hours=RUN)
 
 numhours=192
-inpath='data/'
-outpath='forecasts/'
+inpath='/g/data/w40/mb0427/MonashWeb/data/'
+outpath='/g/data/w40/mb0427/MonashWeb/forecasts/'
 
 fhour=-numhours
 i=1
@@ -75,6 +76,8 @@ while fhour<=numhours:
     data=sort_GFS_data.get_precip6h(inpath,indt)
     for name in namelist:
         functions.plot_precip6h(inpath,outpath,indt,init_dt,i,data,name=name)
-     
+    
+    gc.collect()
+    
     fhour=fhour+6
     i=i+1

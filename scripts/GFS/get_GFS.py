@@ -26,7 +26,7 @@ DATE = FULLDATE.strftime("%Y%m%d")
 DATE_LONG = FULLDATE.strftime("%Y-%m-%d %H:%M") #convert date to datestring in format YYYY-MM-DD
 
 # Delete all old forcing files
-dir = "data/"
+dir = "/g/data/w40/mb0427/MonashWeb/data/"
 files = os.listdir(dir)
 for file in files:
     if file.startswith("GFS_"):
@@ -54,6 +54,7 @@ if get_grid:
                     indtstr = indt.strftime("%Y%m%d_%H")
                     inYMDstr = indt.strftime("%Y%m%d")
                     inHstr = indt.strftime("%H")
+                    print(indtstr)
                     dir_path = dir+'GFS_' + indtstr +'.grib2'
                     url = "https://nomads.ncep.noaa.gov/cgi-bin/filter_gfs_0p25.pl?file=gfs.t"+inHstr+"z.pgrb2.0p25.f" + tlong + "&" + LEVS + SUBREGION + OPT + "dir=%2Fgfs.$" + inYMDstr + "%2F"+inHstr+"%2Fatmos"
                     filename = wget.download(url, out=dir_path)
@@ -69,6 +70,7 @@ if get_grid:
                     tlong = str(t).zfill(3)
                     indt=FULLDATE+relativedelta(hours=t)
                     indtstr = indt.strftime("%Y%m%d_%H")
+                    print(indtstr)
                     dir_path = dir+'GFS_' + indtstr +'.grib2'
                     url = "https://nomads.ncep.noaa.gov/cgi-bin/filter_gfs_0p25.pl?file=gfs.t"+RUNstr+"z.pgrb2.0p25.f" + tlong + "&" + LEVS + SUBREGION + OPT + "dir=%2Fgfs.$" + DATE + "%2F"+RUNstr+"%2Fatmos"
                     filename = wget.download(url, out=dir_path)
@@ -96,6 +98,7 @@ if get_surface:
                     indtstr = indt.strftime("%Y%m%d_%H")
                     inYMDstr = indt.strftime("%Y%m%d")
                     inHstr = indt.strftime("%H")
+                    print(indtstr)
                     dir_path = dir+'GFS_surface_' + indtstr +'.grib2'
                     url = "https://nomads.ncep.noaa.gov/cgi-bin/filter_gfs_0p25.pl?file=gfs.t"+inHstr+"z.pgrb2.0p25.f" + tlong + "&" + LEVS + SUBREGION + OPT + "dir=%2Fgfs.$" + inYMDstr + "%2F"+inHstr+"%2Fatmos"
                     filename = wget.download(url, out=dir_path)
@@ -112,6 +115,7 @@ if get_surface:
                     tlong = str(t).zfill(3)
                     indt=FULLDATE+relativedelta(hours=t)
                     indtstr = indt.strftime("%Y%m%d_%H")
+                    print(indtstr)
                     dir_path = dir+'GFS_surface_' + indtstr +'.grib2'
                     url = "https://nomads.ncep.noaa.gov/cgi-bin/filter_gfs_0p25.pl?file=gfs.t"+RUNstr+"z.pgrb2.0p25.f" + tlong + "&" + LEVS + SUBREGION + OPT + "dir=%2Fgfs.$" + DATE + "%2F"+RUNstr+"%2Fatmos"
                     filename = wget.download(url, out=dir_path)
@@ -155,6 +159,7 @@ if get_precip:
                     inF=6
                 inRUNstr=str(inRUN).zfill(2)
                 tlong = str(inF).zfill(3)
+                print(indtstr)
                 dir_path = dir+'GFS_precip_' + indtstr +'.grib2'
                 url = "https://nomads.ncep.noaa.gov/cgi-bin/filter_gfs_0p25.pl?file=gfs.t"+inRUNstr+"z.pgrb2.0p25.f" + tlong + "&" + LEVS + SUBREGION + OPT + "dir=%2Fgfs.$" + inYMDstr + "%2F"+inRUNstr+"%2Fatmos"
                 filename = wget.download(url, out=dir_path)
@@ -171,6 +176,7 @@ if get_precip:
                 tlong = str(t).zfill(3)
                 indt=FULLDATE+relativedelta(hours=t)
                 indtstr = indt.strftime("%Y%m%d_%H")
+                print(indtstr)
                 dir_path = dir+'GFS_precip_' + indtstr +'.grib2'
                 url = "https://nomads.ncep.noaa.gov/cgi-bin/filter_gfs_0p25.pl?file=gfs.t"+RUNstr+"z.pgrb2.0p25.f" + tlong + "&" + LEVS + SUBREGION + OPT + "dir=%2Fgfs.$" + DATE + "%2F"+RUNstr+"%2Fatmos"
                 filename = wget.download(url, out=dir_path)
@@ -187,6 +193,7 @@ if get_precip:
                 tlong = str(t).zfill(3)
                 indt=FULLDATE+relativedelta(hours=t)
                 indtstr = indt.strftime("%Y%m%d_%H")
+                print(indtstr)
                 dir_path = dir+'GFS_precip_' + indtstr +'.grib2'
                 url = "https://nomads.ncep.noaa.gov/cgi-bin/filter_gfs_0p25.pl?file=gfs.t"+RUNstr+"z.pgrb2.0p25.f" + tlong + "&" + LEVS + SUBREGION + OPT + "dir=%2Fgfs.$" + DATE + "%2F"+RUNstr+"%2Fatmos"
                 filename = wget.download(url, out=dir_path)
