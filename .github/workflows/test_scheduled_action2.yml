@@ -8,6 +8,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d %H:%M:%S')"
       - name: Checkout repository
         ### Latest at time of writing
         uses: actions/checkout@v3.3.0
