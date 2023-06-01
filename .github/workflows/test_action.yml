@@ -30,5 +30,5 @@ jobs:
           key: ${{ secrets.GADI_KEY }}
           passphrase: ${{ secrets.GADI_KEY_PASSPHRASE }}
           script: |
-            cd /home/565/mb0427/MonashWeb/
-            qsub -N GITHUB_test -P w40 -q normal -l ncpus=1 -l walltime=00:05:00 -l wd -l storage=gdata/rt52 -l mem=8GB -M michael.barnes@monash.edu -m abe
+            cd /home/565/mb0427/MonashWeb/monash_weather_web/
+            ./download_files.sh
