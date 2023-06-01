@@ -21,4 +21,4 @@ jobs:
           script: |
             cd /home/565/mb0427/MonashWeb/
             mkdir -p TEST_FROM_GITHUB
-            qsub -N GITHUB_test -P w40 -q normal -l ncpus=1 -l walltime=00:05:00 -l wd -l storage=gdata/rt52 -l mem=8GB -M michael.barnes@monash.edu -m abe
+            qsub -N GITHUB_test -P w40 -q normal -l ncpus=1 -l walltime=00:05:00 -l wd -l storage=gdata/rt52 -l mem=1GB -M michael.barnes@monash.edu -m abe
