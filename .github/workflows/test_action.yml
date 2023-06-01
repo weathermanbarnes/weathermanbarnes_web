@@ -27,7 +27,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Create Admin dirs on Gadi
+      - name: Create test directory on Gadi
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: gadi.nci.org.au
