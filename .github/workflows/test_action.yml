@@ -24,7 +24,7 @@ jobs:
         ### Latest at time of writing
         uses: actions/checkout@v3.3.0
       - name: Create Admin dirs on Gadi
-        timeout-minutes: 360 # Times out after n minutes
+        timeout-minutes: 1 # Times out after n minutes
         uses: appleboy/ssh-action@v0.1.7
         with:
           debug: True
