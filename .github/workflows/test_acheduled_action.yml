@@ -1,4 +1,4 @@
-name: "Close stale issues"
+name: "Test scheduled action to GADI"
 on:
   schedule:
   - cron: "10 23 0 0 0"
