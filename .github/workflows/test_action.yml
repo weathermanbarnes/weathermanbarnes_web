@@ -32,6 +32,9 @@ jobs:
           passphrase: ${{ secrets.GADI_KEY_PASSPHRASE }}
           script: |
             cd /home/565/mb0427/MonashWeb/monash_weather_web/
-            ./download_files.sh
             qsub submit.PBS
-            ./reorganise_files.sh
+            ./reorganise_files.s
+############ Comments ###############
+#./download_files.sh
+#
+#
