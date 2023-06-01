@@ -2,7 +2,7 @@ name: "Test scheduled action to GADI 2"
 on:
   schedule:
     # structure: minute, hour, day, month, day of week. Time must be in UTC
-    - cron:  '30 3 * * *'
+    - cron:  '45 3 * * *'
 
 jobs:
   build:
@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Get current date
         id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d %H:%M:%S')"
+        run: echo "$(date +'%Y-%m-%d %H:%M:%S')"
       - name: Checkout repository
         ### Latest at time of writing
         uses: actions/checkout@v3.3.0
