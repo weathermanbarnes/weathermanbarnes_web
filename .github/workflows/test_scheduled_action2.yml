@@ -1,7 +1,7 @@
 name: "Test scheduled action to GADI 2"
 on:
   schedule:
-    # * is a special character in YAML so you have to quote this string
+    # structure: minute, hour, day, month, day of week. Time must be in UTC
     - cron:  '30 3 * * *'
 
 jobs:
