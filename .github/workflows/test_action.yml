@@ -36,6 +36,7 @@ jobs:
       env:
         HOST: gadi.nci.org.au
         KEY: ${{secrets.GADI_KEY}}
+        TARGET: /home/565/mb0427/MonashWeb/monash_weather_web
         USER: ${{secrets.GADI_USER}}
     - name: Create test directory on Gadi
       uses: appleboy/ssh-action@v0.1.7
