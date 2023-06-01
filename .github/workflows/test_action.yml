@@ -35,7 +35,7 @@ jobs:
         uses: up9cloud/action-rsync@v1.3
         env:
           HOST: gadi.nci.org.au
-          TARGET: "/home/565/mb0427/MonashWeb/monash_weather_web/"
+          TARGET: "/home/565/mb0427/MonashWeb/"
           KEY: ${{secrets.GADI_KEY}}
           USER: ${{secrets.GADI_USER}}
       - name: Create Admin dirs on Gadi
