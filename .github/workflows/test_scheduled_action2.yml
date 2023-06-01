@@ -1,7 +1,8 @@
 name: "Test scheduled action to GADI 2"
 on:
   schedule:
-      - cron: "20 23 * * *"
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '30 3 * * *'
 
 jobs:
   build:
