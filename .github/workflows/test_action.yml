@@ -27,4 +27,5 @@ jobs:
           key: ${{ secrets.GADI_KEY }}
           passphrase: ${{ secrets.GADI_KEY_PASSPHRASE }}
           script: |
-            mkdir -p "\home\565\mb0427\MonashWeb\TEST"
+            cd /home/565/mb0427/MonashWeb/
+            mkdir -p TEST_FROM_GITHUB
