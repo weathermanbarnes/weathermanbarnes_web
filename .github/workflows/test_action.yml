@@ -30,14 +30,6 @@ jobs:
       - name: Checkout repository
         ### Latest at time of writing
         uses: actions/checkout@v3.3.0
-      - name: Sync repository to Gadi
-        ### Latest at time of writing
-        uses: up9cloud/action-rsync@v1.3
-        env:
-          HOST: gadi.nci.org.au
-          TARGET: "/home/565/mb0427/MonashWeb/"
-          KEY: ${{secrets.GADI_KEY}}
-          USER: ${{secrets.GADI_USER}}
       - name: Create Admin dirs on Gadi
         uses: appleboy/ssh-action@v0.1.7
         with:
