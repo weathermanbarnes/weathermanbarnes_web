@@ -11,9 +11,11 @@ on:
           - info
           - warning
           - debug
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 360
     steps:
       - name: Get current date
         id: date
@@ -32,6 +34,7 @@ jobs:
           passphrase: ${{ secrets.GADI_KEY_PASSPHRASE }}
           script: |
             cd /home/565/mb0427/MonashWeb/monash_weather_web/
+            ./download_files.sh
             ./submit.PBS
 ############ Comments ###############
 #./download_files.sh
