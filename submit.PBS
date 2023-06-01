@@ -1,0 +1,40 @@
+#!/bin/bash
+# set the job name
+#export DATE="20230601" 
+export DATE=$(date +%Y%m%d -d "1 day ago")
+NAME=test_${DATE}
+echo "Submitting: ${NAME}"
+
+# Build a string called PBS which contains the instructions for your run
+# This requests 1 node for 1 hour. Runs a program called "my_program" with an argument.
+
+PBS="#!/bin/bash\n\
+#PBS -N ${NAME}\n\
+#PBS -P w40\n\
+#PBS -q normal\n\
+#PBS -l ncpus=1\n\
+#PBS -l walltime=00:01:00\n\
+#PBS -l wd\n\
+#PBS -l storage=gdata/w40\n\
+#PBS -l mem=1GB\n\
+#PBS -M michael.barnes@monash.edu\n\
+#PBS -m abe\n\
+
+echo ${NAME}\n\
+
+###### Load conda modules ######\n\
+module use /g/data/hh5/public/modules\n\
+module load conda/analysis3\n\
+
+###### Change to the repo directory ######\n\
+cd /home/565/mb0427/MonashWeb/monash_weather_web/\n\
+
+###### Run python scripts ######\n\
+python3 scripts/GFS/get_GFS.py ${DATE} 12"
+
+# Echo the string PBS to the function qsub, which submits it as a cluster job for you
+# A small delay is included to avoid overloading the submission process
+
+echo -e ${PBS} | qsub 
+sleep 0.5
+echo "Complete."
