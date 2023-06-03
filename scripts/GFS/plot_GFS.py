@@ -10,15 +10,15 @@ import argparse
 import gc
 
 # this tells the code which year to run this for, so that multiple versions of the script can be submitted to gadi
-# parser = argparse.ArgumentParser()
-# parser.add_argument("date",help="init date",type=str)
-# parser.add_argument("run",help="init run",type=int)
-# args = parser.parse_args()
-# INDATEstr = args.date
-# RUN = args.run
+parser = argparse.ArgumentParser()
+parser.add_argument("date",help="init date",type=str)
+parser.add_argument("run",help="init run",type=int)
+args = parser.parse_args()
+INDATEstr = args.date
+RUN = args.run
 
-INDATEstr='20230520'
-RUN=12
+#INDATEstr='20230520'
+#RUN=12
 
 RUNstr=str(RUN).zfill(2)
 NOW=datetime.strptime(INDATEstr,'%Y%m%d')
