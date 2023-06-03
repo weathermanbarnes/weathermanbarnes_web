@@ -23,7 +23,7 @@ jobs:
       - name: Checkout repository
         ### Latest at time of writing
         uses: actions/checkout@v3.3.0
-      - name: Create Admin dirs on Gadi
+      - name: Download data and create fields
         uses: appleboy/ssh-action@v0.1.7
         with:
           command_timeout: 200m # Times out after n minutes
