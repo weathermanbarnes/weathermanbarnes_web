@@ -14,7 +14,7 @@ PBS="#!/bin/bash\n\
 #PBS -N ${NAME}\n\
 #PBS -P w40\n\
 #PBS -q normal\n\
-#PBS -l ncpus=4\n\
+#PBS -l ncpus=8\n\
 #PBS -l walltime=06:00:00\n\
 #PBS -l wd\n\
 #PBS -l storage=gdata/w40+gdata/hh5\n\
@@ -34,7 +34,8 @@ cd /home/565/mb0427/MonashWeb/monash_weather_web/\n\
 ###### Run python scripts ######\n\
 ## python3 scripts/GFS/get_GFS.py ${DATE} ${RUN}\n\
 python3 scripts/GFS/plot_GFS.py ${DATE} ${RUN}\n\
-python3 plot_copy_to_dir.py"
+python3 plot_copy_to_dir.py\n\
+./git_commit.sh"
 
 # Echo the string PBS to the function qsub, which submits it as a cluster job for you
 # A small delay is included to avoid overloading the submission process
