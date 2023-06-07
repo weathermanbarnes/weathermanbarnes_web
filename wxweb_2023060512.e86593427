@@ -1,2 +1,0 @@
-/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
-  warnings.warn('More than one ' + axis + ' coordinate present for variable'

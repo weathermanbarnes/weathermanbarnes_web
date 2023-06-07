@@ -33,6 +33,7 @@ cd /home/565/mb0427/MonashWeb/monash_weather_web/\n\
 
 ###### Run python scripts ######\n\
 ## python3 scripts/GFS/get_GFS.py ${DATE} ${RUN}\n\
+rm -rf data\n\
 python3 scripts/GFS/plot_GFS.py ${DATE} ${RUN}\n\
 python3 plot_copy_to_dir.py\n\
 ./git_commit.sh"
