@@ -1,12 +1,13 @@
-name: "Test scheduled action to GADI 3"
+name: "Schedule 12Z Run of GFS Data"
 on:
   schedule:
     ### structure: minute, hour, day, month, day of week. Time must be in UTC
-    - cron:  '0 5 * * *'
+    - cron:  '30 16 * * *'
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 120
     steps:
       - name: Get current date
         id: date
@@ -14,15 +15,16 @@ jobs:
       - name: Checkout repository
         ### Latest at time of writing
         uses: actions/checkout@v3.3.0
-      - name: Create Admin dirs on Gadi
+      - name: Download data and create fields
         uses: appleboy/ssh-action@v0.1.7
         with:
+          command_timeout: 200m # Times out after n minutes
           debug: True
           host: gadi.nci.org.au
           username: ${{ secrets.GADI_USER }}
           key: ${{ secrets.GADI_KEY }}
           passphrase: ${{ secrets.GADI_KEY_PASSPHRASE }}
           script: |
-            cd /home/565/mb0427/MonashWeb/
-            mkdir -p TEST_FROM_GITHUB
-            qsub -N GITHUB_test -P w40 -q normal -l ncpus=1 -l walltime=00:05:00 -l wd -l storage=gdata/rt52 -l mem=1GB -M michael.barnes@monash.edu -m abe
+            cd /home/565/mb0427/MonashWeb/monash_weather_web/
+            ./download_files.sh 
+            ./submit.PBS 
