@@ -1,0 +1,440 @@
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/interpolate/one_dimension.py:152: UserWarning: Interpolation point out of data bounds encountered
+  warnings.warn('Interpolation point out of data bounds encountered')
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/interpolate/one_dimension.py:152: UserWarning: Interpolation point out of data bounds encountered
+  warnings.warn('Interpolation point out of data bounds encountered')
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/interpolate/one_dimension.py:152: UserWarning: Interpolation point out of data bounds encountered
+  warnings.warn('Interpolation point out of data bounds encountered')
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/interpolate/one_dimension.py:152: UserWarning: Interpolation point out of data bounds encountered
+  warnings.warn('Interpolation point out of data bounds encountered')
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/interpolate/one_dimension.py:152: UserWarning: Interpolation point out of data bounds encountered
+  warnings.warn('Interpolation point out of data bounds encountered')
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/interpolate/one_dimension.py:152: UserWarning: Interpolation point out of data bounds encountered
+  warnings.warn('Interpolation point out of data bounds encountered')
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/interpolate/one_dimension.py:152: UserWarning: Interpolation point out of data bounds encountered
+  warnings.warn('Interpolation point out of data bounds encountered')
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/interpolate/one_dimension.py:152: UserWarning: Interpolation point out of data bounds encountered
+  warnings.warn('Interpolation point out of data bounds encountered')
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/interpolate/one_dimension.py:152: UserWarning: Interpolation point out of data bounds encountered
+  warnings.warn('Interpolation point out of data bounds encountered')
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/interpolate/one_dimension.py:152: UserWarning: Interpolation point out of data bounds encountered
+  warnings.warn('Interpolation point out of data bounds encountered')
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/interpolate/one_dimension.py:152: UserWarning: Interpolation point out of data bounds encountered
+  warnings.warn('Interpolation point out of data bounds encountered')
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/interpolate/one_dimension.py:152: UserWarning: Interpolation point out of data bounds encountered
+  warnings.warn('Interpolation point out of data bounds encountered')
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/interpolate/one_dimension.py:152: UserWarning: Interpolation point out of data bounds encountered
+  warnings.warn('Interpolation point out of data bounds encountered')
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/interpolate/one_dimension.py:152: UserWarning: Interpolation point out of data bounds encountered
+  warnings.warn('Interpolation point out of data bounds encountered')
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/interpolate/one_dimension.py:152: UserWarning: Interpolation point out of data bounds encountered
+  warnings.warn('Interpolation point out of data bounds encountered')
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/interpolate/one_dimension.py:152: UserWarning: Interpolation point out of data bounds encountered
+  warnings.warn('Interpolation point out of data bounds encountered')
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/interpolate/one_dimension.py:152: UserWarning: Interpolation point out of data bounds encountered
+  warnings.warn('Interpolation point out of data bounds encountered')
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/interpolate/one_dimension.py:152: UserWarning: Interpolation point out of data bounds encountered
+  warnings.warn('Interpolation point out of data bounds encountered')
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/interpolate/one_dimension.py:152: UserWarning: Interpolation point out of data bounds encountered
+  warnings.warn('Interpolation point out of data bounds encountered')
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/interpolate/one_dimension.py:152: UserWarning: Interpolation point out of data bounds encountered
+  warnings.warn('Interpolation point out of data bounds encountered')
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/interpolate/one_dimension.py:152: UserWarning: Interpolation point out of data bounds encountered
+  warnings.warn('Interpolation point out of data bounds encountered')
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/interpolate/one_dimension.py:152: UserWarning: Interpolation point out of data bounds encountered
+  warnings.warn('Interpolation point out of data bounds encountered')
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/interpolate/one_dimension.py:152: UserWarning: Interpolation point out of data bounds encountered
+  warnings.warn('Interpolation point out of data bounds encountered')
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1384: RuntimeWarning: divide by zero encountered in log
+  val = np.log(vapor_pressure / mpconsts.nounit.sat_pressure_0c)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/calc/thermo.py:1385: RuntimeWarning: invalid value encountered in divide
+  return mpconsts.nounit.zero_degc + 243.5 * val / (17.67 - val)
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/interpolate/one_dimension.py:152: UserWarning: Interpolation point out of data bounds encountered
+  warnings.warn('Interpolation point out of data bounds encountered')
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/interpolate/one_dimension.py:152: UserWarning: Interpolation point out of data bounds encountered
+  warnings.warn('Interpolation point out of data bounds encountered')
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable.
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/xarray.py:382: UserWarning: More than one time coordinate present for variable "t".
+  warnings.warn('More than one ' + axis + ' coordinate present for variable'
+/g/data/hh5/public/apps/miniconda3/envs/analysis3-22.10/lib/python3.9/site-packages/metpy/interpolate/one_dimension.py:152: UserWarning: Interpolation point out of data bounds encountered
+  warnings.warn('Interpolation point out of data bounds encountered')
+fatal: unable to access 'https://github.com/weathermanbarnes/monash_weather_web.git/': Failed to connect to github.com port 443 after 12 ms: Couldn't connect to server
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+fatal: unable to access 'https://github.com/weathermanbarnes/monash_weather_web.git/': Failed to connect to github.com port 443 after 10 ms: Couldn't connect to server
