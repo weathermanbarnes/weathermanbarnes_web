@@ -34,8 +34,7 @@ jobs:
           passphrase: ${{ secrets.GADI_KEY_PASSPHRASE }}
           script: |
             cd /home/565/mb0427/MonashWeb/monash_weather_web/
-            ./download_files.sh 
-            ./submit.PBS 
+            qsub -N GITHUB_test -P w40 -q normal -l ncpus=8 -l walltime=06:00:00 -l wd -l storage=gdata/rt52+gdata/hh5 -l mem=8GB -M michael.barnes@monash.edu -m abe ./submit.sh
 ############ Comments ###############
 #./download_files.sh
 #./submit.PBS 
