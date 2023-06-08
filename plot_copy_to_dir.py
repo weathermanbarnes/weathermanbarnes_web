@@ -14,6 +14,8 @@ domains=['IndianOcean','Australia','PacificOcean','SouthAmerica',
 
 plottypes=['UpperLevel',
             'Precip6H',
+            'PTE850',
+            'DT', 
             'IVT',
             'IPV-320K',
             'IPV-330K',
