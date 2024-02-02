@@ -2,7 +2,7 @@ name: "Observation Plots"
 on:
   schedule:
     ### structure: minute, hour, day, month, day of week. Time must be in UTC
-    - cron:  '5,35 * * * *'
+    - cron:  '20 * * * *'
 
 jobs:
   build:
