@@ -25,5 +25,5 @@ jobs:
           key: ${{ secrets.GADI_KEY }}
           passphrase: ${{ secrets.GADI_KEY_PASSPHRASE }}
           script: |
-            cd /home/565/mb0427/Forecasts/
+            cd /home/565/mb0427/gdata-w40/Forecasts/
             ./get_and_plot_weatherdata.sh
