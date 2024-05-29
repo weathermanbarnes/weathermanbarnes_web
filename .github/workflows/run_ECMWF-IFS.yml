@@ -5,7 +5,7 @@ name: ECMWF-IFS 12Z
 on:
   schedule:
     ### structure: minute, hour, day, month, day of week. Time must be in UTC
-    - cron:  '30 1 * * *'
+    - cron:  '40 * * * *'
 
 jobs:
   build:
