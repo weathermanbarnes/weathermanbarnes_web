@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 240
     steps:
       - name: Get current date
         id: date
@@ -18,7 +18,7 @@ jobs:
       - name: Download data and create fields
         uses: appleboy/ssh-action@v0.1.7
         with:
-          command_timeout: 200m # Times out after n minutes
+          command_timeout: 235m # Times out after n minutes
           debug: True
           host: gadi.nci.org.au
           username: ${{ secrets.GADI_USER }}
