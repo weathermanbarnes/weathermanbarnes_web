@@ -1,32 +1,29 @@
-# This is a basic workflow that is manually triggered
-
-name: Manual workflow
-
-# Controls when the action will run. Workflow runs when manually triggered using the UI
-# or API.
+name: "ECMWF-IFS 12Z"
 on:
-  workflow_dispatch:
-    # Inputs the workflow accepts.
-    inputs:
-      name:
-        # Friendly description to be shown in the UI instead of 'name'
-        description: 'Person to greet'
-        # Default value if no value is explicitly provided
-        default: 'World'
-        # Input has to be provided for the workflow to run
-        required: true
-        # The data type of the input
-        type: string
+  schedule:
+    ### structure: minute, hour, day, month, day of week. Time must be in UTC
+    - cron:  '21 00 * * *'
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "greet"
-  greet:
-    # The type of runner that the job will run on
+  build:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    timeout-minutes: 240
     steps:
-    # Runs a single command using the runners shell
-    - name: Send greeting
-      run: echo "Hello ${{ inputs.name }}"
+      - name: Get current date
+        id: date
+        run: echo "$(date +'%Y-%m-%d %H:%M:%S')"
+      - name: Checkout repository
+        ### Latest at time of writing
+        uses: actions/checkout@v3.3.0
+      - name: Download data and create fields
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          command_timeout: 235m # Times out after n minutes
+          debug: True
+          host: gadi.nci.org.au
+          username: ${{ secrets.GADI_USER }}
+          key: ${{ secrets.GADI_KEY }}
+          passphrase: ${{ secrets.GADI_KEY_PASSPHRASE }}
+          script: |
+            cd /home/565/mb0427/gdata-w40/Forecasts/ops_scripts/ECMWF/
+            ./run_ECMWF_eIFS.PBS
