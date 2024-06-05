@@ -1,4 +1,4 @@
-name: "ECMWF-eIFS 12Z"
+name: "ECMWF-eIFS 12Z" 
 on:
   schedule:
     ### structure: minute, hour, day, month, day of week. Time must be in UTC
