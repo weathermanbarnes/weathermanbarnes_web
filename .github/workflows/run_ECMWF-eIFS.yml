@@ -2,7 +2,7 @@ name: "ECMWF-eIFS 12Z"
 on:
   schedule:
     ### structure: minute, hour, day, month, day of week. Time must be in UTC
-    - cron:  '21 00 * * *'
+    - cron:  '30 21 * * *'
 
 jobs:
   build:
