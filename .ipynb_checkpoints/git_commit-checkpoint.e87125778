@@ -1,4 +1,0 @@
-Auto packing the repository in background for optimum performance.
-See "git help gc" for manual housekeeping.
-fatal: unable to stat 'git_commit.e87124834': No such file or directory
-Everything up-to-date
