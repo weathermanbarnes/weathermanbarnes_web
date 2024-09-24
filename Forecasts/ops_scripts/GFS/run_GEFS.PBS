@@ -1,0 +1,227 @@
+#!/bin/bash
+
+data_download=true
+run_plotting=true
+copy_to_bucket=true
+
+#export date=20240526
+export date=$(date -d "yesterday" +"%Y%m%d")
+export run=12
+export nciproj="gb02"
+export outpath="/scratch/"${nciproj}"/mb0427/Website/Forecasts/NOAA/GEFS/"
+export runpath="/g/data/"${nciproj}"/mb0427/Website/Forecasts/ops_scripts/GFS/"
+
+echo ${date} ${run}
+
+rm -f "${outpath}"*.check
+
+rm -rf "${runpath}output/"get_eIFS*.e
+rm -rf "${runpath}output/"get_eIFS*.o
+rm -rf "${runpath}output/"plot_eIFS*.e
+rm -rf "${runpath}output/"plot_eIFS*.o
+rm -rf "${runpath}output/"copy_eIFS*.e
+rm -rf "${runpath}output/"copy_eIFS*.o
+
+RANGE=$(seq 24 24 240)
+
+if [ "$data_download" = true ]; then
+    
+    rm -f "${outpath}data/"*.grib2
+    rm -f "${outpath}data/"*.index
+    rm -f "${outpath}data/"*.idx
+
+    sleep 5
+    
+    # Use the range in a loop
+    for day in $RANGE;
+    do
+        # set the job name
+        NAME="get_GEFS-t"${day}
+        echo "Submitting: ${NAME}"
+    
+        # Build a string called PBS which contains the instructions for your run
+        # This requests 1 node for 1 hour. Runs a program called "my_program" with an argument.
+    
+        PBS="#!/bin/bash\n\
+        #PBS -N ${NAME}\n\
+    	#PBS -P ${nciproj}\n\
+        #PBS -q copyq\n\
+        #PBS -l ncpus=1\n\
+        #PBS -l walltime=01:00:00\n\
+        #PBS -l wd\n\
+        #PBS -l storage=gdata/${nciproj}+gdata/rt52+gdata/uc16+gdata/hh5\n\
+        #PBS -l mem=2GB\n\
+        #PBS -e ${runpath}output/${NAME}.e\n\
+        #PBS -o ${runpath}output/${NAME}.o\n\
+    
+    	module use /g/data/hh5/public/modules\n\
+    	module load conda/analysis3-24.01\n\
+    	
+    	cd ${runpath}\n\
+        python3 get_GEFS.py ${date} ${run} ${day}"
+    
+        # Echo the string PBS to the function qsub, which submits it as a cluster job for you
+        # A small delay is included to avoid overloading the submission process
+    
+        echo -e ${PBS} | qsub
+        sleep 0.5
+        echo "Complete."
+    done
+    
+    MAX_WAIT_TIME=3600
+    
+    # Start time
+    START_TIME=$(date +%s)
+    
+    for day in $RANGE;
+    do
+        # Path to the file to check
+        FILE_PATH="$outpath/get_GEFS_t${day}.check"
+        
+        # Wait until the file exists
+        while [ ! -f "$FILE_PATH" ]; do
+            echo "Waiting for $FILE_PATH to be created..."
+            sleep 30  # Wait for 1 second before checking again
+        done
+    
+        CURRENT_TIME=$(date +%s)
+        ELAPSED_TIME=$((CURRENT_TIME - START_TIME))
+    
+        if [ $ELAPSED_TIME -ge $MAX_WAIT_TIME ]; then
+            echo "File $FILE_PATH did not appear within the maximum wait time of 1 hour."
+            exit 1
+        fi
+    done
+else
+    echo "Skipping data download."
+fi
+
+if [ "$run_plotting" = true ]; then
+    
+    rm -f "${outpath}images/"*.jpg
+    
+    for day in $RANGE;
+    do
+        # set the job name
+        NAME="plot_GEFS-t"${day}
+        echo "Submitting: ${NAME}"
+    
+        # Build a string called PBS which contains the instructions for your run
+        # This requests 1 node for 1 hour. Runs a program called "my_program" with an argument.
+    
+        PBS="#!/bin/bash\n\
+        #PBS -N ${NAME}\n\
+    	#PBS -P ${nciproj}\n\
+        #PBS -q normal\n\
+        #PBS -l ncpus=4\n\
+        #PBS -l walltime=02:00:00\n\
+        #PBS -l wd\n\
+        #PBS -l storage=gdata/${nciproj}+gdata/rt52+gdata/uc16+gdata/hh5\n\
+        #PBS -l mem=8GB\n\
+        #PBS -e ${runpath}output/${NAME}.e\n\
+        #PBS -o ${runpath}output/${NAME}.o\n\
+    
+    	module use /g/data/hh5/public/modules\n\
+    	module load conda/analysis3-24.01\n\
+    	
+    	cd ${runpath}\n\
+        python3 poststamp_upper-GEFS.py ${date} ${run} ${day}\n\
+        python3 poststamp_precip-GEFS.py ${date} ${run} ${day}"
+    
+        # Echo the string PBS to the function qsub, which submits it as a cluster job for you
+        # A small delay is included to avoid overloading the submission process
+        #         python3 spagetti_upper-eIFS.py ${date} ${run} ${day}\n\
+    
+        echo -e ${PBS} | qsub
+        sleep 0.5
+        echo "Complete."
+    done
+
+    MAX_WAIT_TIME=7200
+    START_TIME=$(date +%s)
+    
+    for day in $RANGE;
+    do
+        # Path to the file to check
+        FILE_PATH="$outpath/plot_GEFS_Precip_t${day}.check"
+        
+        # Wait until the file exists
+        while [ ! -f "$FILE_PATH" ]; do
+            echo "Waiting for $FILE_PATH to be created..."
+            sleep 60  # Wait for 1 second before checking again
+        done
+    
+        CURRENT_TIME=$(date +%s)
+        ELAPSED_TIME=$((CURRENT_TIME - START_TIME))
+    
+        if [ $ELAPSED_TIME -ge $MAX_WAIT_TIME ]; then
+            echo "File $FILE_PATH did not appear within the maximum wait time of 1 hour."
+            exit 1
+        fi
+    done
+else
+    echo "Skipping plotting data to bucket."
+fi
+
+if [ "$copy_to_bucket" = true ]; then
+    # Use the range in a loop
+    for day in {1..1};
+    do
+        # set the job name
+        NAME="copy_GEFS-all"
+        echo "Submitting: ${NAME}"
+    
+        # Build a string called PBS which contains the instructions for your run
+        # This requests 1 node for 1 hour. Runs a program called "my_program" with an argument.
+    
+        PBS="#!/bin/bash\n\
+        #PBS -N ${NAME}\n\
+        #PBS -P ${nciproj}\n\
+        #PBS -q copyq\n\
+        #PBS -l ncpus=1\n\
+        #PBS -l walltime=01:00:00\n\
+        #PBS -l wd\n\
+        #PBS -l storage=gdata/${nciproj}+gdata/rt52+gdata/uc16+gdata/hh5\n\
+        #PBS -l mem=2GB\n\
+        #PBS -e ${runpath}output/${NAME}.e\n\
+        #PBS -o ${runpath}output/${NAME}.o\n\
+    
+    	module use /g/data/hh5/public/modules\n\
+    	module load conda/analysis3-24.01\n\
+    	
+    	cd ${runpath}\n\
+        python3 plot_GEFS_copy_to_bucket.py ${date} ${run}"
+    
+        # Echo the string PBS to the function qsub, which submits it as a cluster job for you
+        # A small delay is included to avoid overloading the submission process
+    
+        echo -e ${PBS} | qsub
+        sleep 0.5
+        echo "Complete."
+    done
+    
+    MAX_WAIT_TIME=5000
+    START_TIME=$(date +%s)
+    
+    for day in {1..1};
+    do
+        # Path to the file to check
+        FILE_PATH="$outpath/copy_GEFS_data.check"
+        
+        # Wait until the file exists
+        while [ ! -f "$FILE_PATH" ]; do
+            echo "Waiting for $FILE_PATH to be created..."
+            sleep 10  # Wait for 1 second before checking again
+        done
+    
+        CURRENT_TIME=$(date +%s)
+        ELAPSED_TIME=$((CURRENT_TIME - START_TIME))
+    
+        if [ $ELAPSED_TIME -ge $MAX_WAIT_TIME ]; then
+            echo "File $FILE_PATH did not appear within the maximum wait time of 1 hour."
+            exit 1
+        fi
+    done
+else
+    echo "Skipping copy data to bucket."
+fi
