@@ -1,0 +1,29 @@
+name: "GEFS 12Z" 
+on:
+  schedule:
+    ### structure: minute, hour, day, month, day of week. Time must be in UTC
+    - cron:  '30 21 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "$(date +'%Y-%m-%d %H:%M:%S')"
+      - name: Checkout repository
+        ### Latest at time of writing
+        uses: actions/checkout@v3.3.0
+      - name: Download data and create fields
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          command_timeout: 235m # Times out after n minutes
+          debug: True
+          host: gadi.nci.org.au
+          username: ${{ secrets.GADI_USER }}
+          key: ${{ secrets.GADI_KEY }}
+          passphrase: ${{ secrets.GADI_KEY_PASSPHRASE }}
+          script: |
+            cd /home/565/mb0427/gdata-gb02/Website/Forecasts/ops_scripts/ECMWF/
+            ./run_ECMWF_eIFS.PBS
