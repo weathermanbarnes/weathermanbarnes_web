@@ -296,6 +296,100 @@ def plot_maxmin_points(lon, lat, data, extrema, nsize, symbol, color='k',
                 color=color, size=12, clip_on=True, fontweight='bold',
                 horizontalalignment='center', verticalalignment='top', transform=transform)
 
+def plot_fai(outpath,dt,init_dt,fignum,indata,name='Australia',model_name='GFS',dpi=150,**kwargs):
+    plot_extent,centlon,figsize,barblength,proj,southern_hemisphere,regional_grid=get_domain_settings(name)
+    data=indata.copy()
+    
+    for k in data.keys():
+        if k=='lats':
+            data[k]=data[k].sel(latitude=slice(plot_extent[3]+10,plot_extent[2]-5))
+        elif k=='lons':
+            None
+        else:
+            data[k]=data[k].sel(latitude=slice(plot_extent[3]+10,plot_extent[2]-5))
+    
+    dstr=dt.strftime('%Y%m%d_%H')
+    dstr_long=dt.strftime('%H%M UTC %d %b %Y')
+    dstr_init_long=init_dt.strftime('%H%M UTC %d %b %Y')
+    
+    fig=plt.figure(figsize=figsize)
+    data_crs=ccrs.PlateCarree()
+    
+    ax=plt.axes(projection=proj)
+    ax.set_extent(plot_extent,crs=data_crs)
+    if not regional_grid:
+        ax.set_boundary(map_circle, transform=ax.transAxes)
+    
+    plot_levels = np.arange(2,20,2)
+    lon2d, lat2d = np.meshgrid(data['fai850'].longitude.values, data['fai850'].latitude.values)
+    cyclic_data, cyclic_lon2d, cyclic_lat2d = add_cyclic((data['fai850'].values*1e10), x=lon2d, y=lat2d)
+    if not regional_grid:
+        cf=ax.pcolormesh(cyclic_lon2d, cyclic_lat2d, cyclic_data, vmin=2, vmax=20, #levels=plot_levels,
+                cmap='ocean_r',#extend='max',
+                transform=data_crs)
+    else:
+        cf=ax.pcolormesh(cyclic_lon2d, cyclic_lat2d, cyclic_data, vmin=2, vmax=20, #levels=plot_levels,
+                cmap='ocean_r',#extend='max',
+                transform=data_crs)
+    
+    plot_levels = list(range(1000,2500,30))
+    lon2d, lat2d = np.meshgrid(data['z850'].longitude.values, data['z850'].latitude.values)
+    cyclic_data, cyclic_lon2d, cyclic_lat2d = add_cyclic(data['z850'].values, x=lon2d, y=lat2d)
+    c=ax.contour(cyclic_lon2d, cyclic_lat2d, cyclic_data,
+                 levels=plot_levels,colors='black',
+                 linewidths=0.8,transform=data_crs)
+    
+    fmt = '%i'
+    ax.clabel(c, c.levels, inline=True, fmt=fmt, fontsize=10, inline_spacing=0)
+    
+    ax.add_feature(LAND,facecolor='lightgrey')
+    ax.coastlines(linewidths=0.4)
+    
+    if not regional_grid:
+        gl = ax.gridlines(crs=data_crs, draw_labels=True,
+                          linewidth=0.6, color='lightgrey', alpha=0.5, linestyle='--')
+    else:
+        gl = ax.gridlines(crs=data_crs, draw_labels=True, x_inline=False, 
+                          y_inline=False, linewidth=0.33, color='k',alpha=0.5)
+    if not regional_grid:
+        xlocators=list(np.arange(-180,190,30))
+    else:
+        xlocators=list(np.arange(-180,190,10))
+    gl.xlocator = mticker.FixedLocator(xlocators)
+    gl.xformatter = LONGITUDE_FORMATTER
+    gl.yformatter = LATITUDE_FORMATTER
+    gl.top_labels = False
+    gl.right_labels = False
+    if not regional_grid:
+        gl.bottom_labels = False 
+    if regional_grid:
+        gl.xlabel_style = gl.ylabel_style ={'size': 8, 'color': 'black','rotation': 0}
+    else:
+        gl.xlabel_style = gl.ylabel_style ={'size': 8, 'color': 'black'}
+    
+    plt.title('850hPa GPH (black) | 850hPa Frontal Activity Index (shading)\n'+model_name +' Forecast | Init: ' + dstr_init_long +' | Valid: '+dstr_long, 
+              fontsize=10)
+    
+    ax_pos=[0.25,0.12,0.5,0.015] #[left, bottom, width, height]
+    fig=plt.gcf()
+    cbar_ax = fig.add_axes(ax_pos)
+    cb=fig.colorbar(cf,orientation="horizontal", cax=cbar_ax)
+    cb.ax.tick_params(labelsize=8)
+    cb.set_label('Frontal Activity Index [$K.m^{-1}.s^{-1} * 1e^{10}$]', rotation=0, fontsize=8)
+    #cb.set_label(incapetype+' [$J.kg^{-1}$]', rotation=0, fontsize=8)
+    
+    copywrite_text='\xa9 Michael A. Barnes\nwww.weathermanbarnes.com'
+    ax.text(0.01, 0.015, copywrite_text, fontsize=6, 
+             horizontalalignment='left', verticalalignment='bottom', 
+             transform=ax.transAxes,
+             bbox=dict(facecolor='white', alpha=0.95),zorder=10)
+    
+    outfile=outpath+model_name+'_'+name+'_FAI_'+str(fignum)+'.jpg'
+    plt.savefig(outfile, dpi=dpi)
+    crop(outfile)
+    plt.close('all') 
+    #plt.show()
+
 def plot_precip6h(outpath,dt,init_dt,fignum,indata,name='Australia',model_name='GFS',dpi=150,**kwargs):
     
     plot_extent,centlon,figsize,barblength,proj,southern_hemisphere,regional_grid=get_domain_settings(name)
@@ -337,7 +431,7 @@ def plot_precip6h(outpath,dt,init_dt,fignum,indata,name='Australia',model_name='
     cf=ax.contourf(cyclic_lon2d, cyclic_lat2d,cyclic_data,
                    levels=rain_levels,
                    norm=BoundaryNorm(rain_levels,len(rain_levels)),cmap=cmap,extend='max',
-                   transform=data_crs)
+                   transform=data_crs)#, transform_first=True)
     
     if not regional_grid:
         lon2d, lat2d = np.meshgrid(data['u10'].longitude.values, data['u10'].latitude.values)
@@ -1343,7 +1437,113 @@ def plot_DT(outpath,dt,init_dt,fignum,indata,name='Australia',model_name='GFS',d
     crop(outfile)
     plt.close('all') 
 
-
+def plot_cape(outpath,dt,init_dt,fignum,indata,name='Australia',incapetype='CAPE',model_name='GFS',dpi=150,**kwargs):
+    plot_extent,centlon,figsize,barblength,proj,southern_hemisphere,regional_grid=get_domain_settings(name)
+    data=indata.copy()
+    
+    for k in data.keys():
+        if k=='lats':
+            data[k]=data[k].sel(latitude=slice(plot_extent[3]+10,plot_extent[2]-5))
+        elif k=='lons':
+            None
+        else:
+            data[k]=data[k].sel(latitude=slice(plot_extent[3]+10,plot_extent[2]-5))
+    
+    dstr=dt.strftime('%Y%m%d_%H')
+    dstr_long=dt.strftime('%H%M UTC %d %b %Y')
+    dstr_init_long=init_dt.strftime('%H%M UTC %d %b %Y')
+    
+    fig=plt.figure(figsize=figsize)
+    data_crs=ccrs.PlateCarree()
+    
+    ax=plt.axes(projection=proj)
+    ax.set_extent(plot_extent,crs=data_crs)
+    if not regional_grid:
+        ax.set_boundary(map_circle, transform=ax.transAxes)
+    
+    plot_levels = np.arange(250,4250,250)
+    lon2d, lat2d = np.meshgrid(data['cape'].longitude.values, data['cape'].latitude.values)
+    cyclic_data, cyclic_lon2d, cyclic_lat2d = add_cyclic(data['cape'].values, x=lon2d, y=lat2d)
+    #if not regional_grid:
+    cf=ax.contourf(cyclic_lon2d, cyclic_lat2d, cyclic_data, levels=plot_levels,
+            cmap='rainbow',extend='max',
+            transform=data_crs)
+    #else:
+    #    cf=ax.contourf(cyclic_lon2d, cyclic_lat2d, cyclic_data, levels=plot_levels,
+    #            cmap='rainbow',extend='max',
+    #            transform=data_crs)
+    
+    plot_levels = list(range(1000,2500,30))
+    lon2d, lat2d = np.meshgrid(data['z850'].longitude.values, data['z850'].latitude.values)
+    cyclic_data, cyclic_lon2d, cyclic_lat2d = add_cyclic(data['z850'].values, x=lon2d, y=lat2d)
+    c=ax.contour(cyclic_lon2d, cyclic_lat2d, cyclic_data,
+                 levels=plot_levels,colors='black',
+                 linewidths=0.8,transform=data_crs)
+    
+    fmt = '%i'
+    ax.clabel(c, c.levels, inline=True, fmt=fmt, fontsize=10, inline_spacing=0)
+    
+    plot_levels = list(range(250,350,4))
+    lon2d, lat2d = np.meshgrid(data['pt850'].longitude.values, data['pt850'].latitude.values)
+    cyclic_data, cyclic_lon2d, cyclic_lat2d = add_cyclic(data['pt850'].values, x=lon2d, y=lat2d)
+    c=ax.contour(cyclic_lon2d, cyclic_lat2d, cyclic_data,
+                 levels=plot_levels,colors='red',linestyles='-',linewidths=0.8,
+                 transform=data_crs)
+    fmt = '%i'
+    ax.clabel(c, c.levels, inline=True, fmt=fmt, fontsize=10, inline_spacing=0)
+    plot_levels = list(range(546-120,546,6))
+    #c=ax.contour(cyclic_lon2d, cyclic_lat2d, cyclic_data,
+    #             levels=plot_levels,colors='blue',linestyles='--',linewidths=1.5,
+    #             transform=data_crs)
+    #fmt = '%i'
+    #ax.clabel(c, c.levels, inline=True, fmt=fmt, fontsize=10, inline_spacing=0)
+    
+    ax.add_feature(LAND,facecolor='lightgrey')
+    ax.coastlines(linewidths=0.4)
+    
+    if not regional_grid:
+        gl = ax.gridlines(crs=data_crs, draw_labels=True,
+                          linewidth=0.6, color='lightgrey', alpha=0.5, linestyle='--')
+    else:
+        gl = ax.gridlines(crs=data_crs, draw_labels=True, x_inline=False, 
+                          y_inline=False, linewidth=0.33, color='k',alpha=0.5)
+    if not regional_grid:
+        xlocators=list(np.arange(-180,190,30))
+    else:
+        xlocators=list(np.arange(-180,190,10))
+    gl.xlocator = mticker.FixedLocator(xlocators)
+    gl.xformatter = LONGITUDE_FORMATTER
+    gl.yformatter = LATITUDE_FORMATTER
+    gl.top_labels = False
+    gl.right_labels = False
+    if not regional_grid:
+        gl.bottom_labels = False 
+    if regional_grid:
+        gl.xlabel_style = gl.ylabel_style ={'size': 8, 'color': 'black','rotation': 0}
+    else:
+        gl.xlabel_style = gl.ylabel_style ={'size': 8, 'color': 'black'}
+    
+    plt.title(incapetype+' (shading) | 850hPa GPH (black) | 850hPa Potential Temperature (red, K)\n'+model_name +' Forecast | Init: ' + dstr_init_long +' | Valid: '+dstr_long, 
+              fontsize=10)
+    
+    ax_pos=[0.25,0.12,0.5,0.015] #[left, bottom, width, height]
+    fig=plt.gcf()
+    cbar_ax = fig.add_axes(ax_pos)
+    cb=fig.colorbar(cf,orientation="horizontal", cax=cbar_ax)
+    cb.ax.tick_params(labelsize=8)
+    cb.set_label(incapetype+' [$J.kg^{-1}$]', rotation=0, fontsize=8)
+    
+    copywrite_text='\xa9 Michael A. Barnes\nwww.weathermanbarnes.com'
+    ax.text(0.01, 0.015, copywrite_text, fontsize=6, 
+             horizontalalignment='left', verticalalignment='bottom', 
+             transform=ax.transAxes,
+             bbox=dict(facecolor='white', alpha=0.95),zorder=10)
+    
+    outfile=outpath+model_name+'_'+name+'_CAPE_'+str(fignum)+'.jpg'
+    plt.savefig(outfile, dpi=dpi)
+    crop(outfile)
+    plt.close('all') 
+    #plt.show()
 
 
 

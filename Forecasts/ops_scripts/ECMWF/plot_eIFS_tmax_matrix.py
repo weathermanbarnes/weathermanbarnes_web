@@ -1,5 +1,5 @@
 import sys
-sys.path.append("/home/565/mb0427/gdata-gb02/Website/Forecasts/ops_scripts/")
+sys.path.append("weathermanbarnes_web/Forecasts/ops_scripts/")
 import os
 import xarray as xr
 import numpy as np
@@ -59,8 +59,8 @@ args = parser.parse_args()
 INDATEstr = args.date
 RUN = args.run
 
-home_path='/home/565/mb0427/gdata-gb02/Website/Forecasts/ops_scripts/ECMWF/'
-outpath='/scratch/gb02/mb0427/Website/Forecasts/ECMWF/eIFS/'
+home_path='weathermanbarnes_web/Forecasts/ops_scripts/ECMWF/'
+outpath='weathermanbarnes_web/../scratch/eIFS/'
 
 indatetime=datetime.strptime(INDATEstr,'%Y%m%d')
 indatetime=indatetime+relativedelta(hours=RUN)
@@ -106,7 +106,7 @@ tmax_C['time']=valid_times.values
 
 del tmax_t, tmax_tt, tmax, tm
 
-with open('/home/565/mb0427/gdata-gb02/Website/Forecasts/ops_scripts/city_metadata.pkl', 'rb') as handle:
+with open('weathermanbarnes_web/Forecasts/ops_scripts/city_metadata.pkl', 'rb') as handle:
     city_dict = pickle.load(handle)
 
 tlevels =  range(0,55,5)

@@ -39,6 +39,9 @@ datadir= cwd+"/scratch/eIFS/data/"
 os.chdir(datadir)
 files = os.listdir(datadir)
 
+url_main='https://storage.googleapis.com/ecmwf-open-data/'
+#url_main='https://data.ecmwf.int/forecasts/'
+
 ## Max and min temp
 ltypes=['sfc']#,'sfc','sfc']
 llists=['sfc']#,'sfc','sfc']
@@ -55,7 +58,7 @@ for t in range(timestep-24+tres,timestep+tres,tres):
     tlong = str(0).zfill(3)
     indt=FULLDATE+relativedelta(hours=t)
     outfile=datadir+init_date+init_time+'-'+str(t)+'h-enfo-ef.index'
-    url = 'https://storage.googleapis.com/ecmwf-open-data/'+init_date+'/'+init_hour+'z/ifs/0p25/enfo/'+init_date+init_time+'-'+str(t)+'h-enfo-ef'
+    url = url_main+init_date+'/'+init_hour+'z/ifs/0p25/enfo/'+init_date+init_time+'-'+str(t)+'h-enfo-ef'
     p = subprocess.Popen(['curl','-k',url+'.index','-o',outfile],stdout=subprocess.PIPE)
     os.waitpid(p.pid,0)
     print("done")
@@ -84,7 +87,7 @@ for t in range(timestep-24+tres,timestep+tres,tres):
             outfile=datadir+row.date+row.time+'00-'+row.step+'h-enfo-ef_'
             outfile=outfile+row.param+'_'+row.levelist+'_'+str(row.number)+'.grib2'
 
-            pcurl = subprocess.Popen(['curl',
+            pcurl = subprocess.Popen(['curl','-s',
                                       url+'.grib2',
                                       '--range',str(start_bytes)+'-'+str(end_bytes),
                                       '-o',outfile],stdout=subprocess.PIPE)
@@ -106,7 +109,7 @@ for t in range(timestep,timestep+24,24):
     tlong = str(0).zfill(3)
     indt=FULLDATE+relativedelta(hours=t)
     outfile=init_date+init_time+'-'+str(t)+'h-enfo-ef.index'
-    url = 'https://storage.googleapis.com/ecmwf-open-data/'+init_date+'/'+init_hour+'z/ifs/0p25/enfo/'+init_date+init_time+'-'+str(t)+'h-enfo-ef'
+    url = url_main+init_date+'/'+init_hour+'z/ifs/0p25/enfo/'+init_date+init_time+'-'+str(t)+'h-enfo-ef'
     p = subprocess.Popen(['curl','-k',url+'.index','-o',outfile],stdout=subprocess.PIPE)
     os.waitpid(p.pid,0)
     print("done")
@@ -131,7 +134,7 @@ for t in range(timestep,timestep+24,24):
             outfile=datadir+row.date+row.time+'00-'+row.step+'h-enfo-ef_'
             outfile=outfile+row.param+'_'+row.levelist+'_'+str(row.number)+'.grib2'
             
-            pcurl = subprocess.Popen(['curl',
+            pcurl = subprocess.Popen(['curl','-s',
                                       url+'.grib2',
                                       '--range',str(start_bytes)+'-'+str(end_bytes),
                                       '-o',outfile],stdout=subprocess.PIPE)
