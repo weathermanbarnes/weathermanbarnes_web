@@ -1,5 +1,5 @@
 import sys
-sys.path.append("weathermanbarnes_web/Forecasts/ops_scripts/")
+sys.path.append("Forecasts/ops_scripts/")
 import os
 import xarray as xr
 import numpy as np
@@ -59,8 +59,8 @@ args = parser.parse_args()
 INDATEstr = args.date
 RUN = args.run
 
-home_path='weathermanbarnes_web/Forecasts/ops_scripts/ECMWF/'
-outpath='weathermanbarnes_web/../scratch/eIFS/'
+home_path='Forecasts/ops_scripts/ECMWF/'
+outpath='../scratch/eIFS/'
 
 indatetime=datetime.strptime(INDATEstr,'%Y%m%d')
 indatetime=indatetime+relativedelta(hours=RUN)

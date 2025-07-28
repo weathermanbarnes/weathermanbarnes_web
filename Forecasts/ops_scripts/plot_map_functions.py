@@ -1,6 +1,7 @@
-import nclcmaps
+import weathermanbarnes_web.Forecasts.ops_scripts.nclcmaps as nclcmaps
 import os
 import numpy as np
+import pandas as pd
 import xarray as xr
 import netCDF4 as nc
 import matplotlib.pyplot as plt
@@ -17,52 +18,51 @@ from cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
 from cartopy.util import add_cyclic
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
-from windspharm.xarray import VectorWind
-from windspharm.tools import prep_data, recover_data, order_latdim
+#from windspharm.xarray import VectorWind
+#from windspharm.tools import prep_data, recover_data, order_latdim
 from metpy.calc import equivalent_potential_temperature,dewpoint_from_relative_humidity,potential_vorticity_baroclinic
 from metpy.calc import potential_temperature,isentropic_interpolation_as_dataset
 from metpy.units import units
-import pykdtree
 import gc
 
-from PIL import Image,ImageOps # pip install Pillow
-import glob
-def crop(path, in_padding=1,pad_type='all',**kwargs):
-    Image.MAX_IMAGE_PIXELS = None
-    
-    try:
-        padding = int(in_padding)
-        padding = np.asarray([-1*padding, -1*padding, padding, padding])
-    except :
-        print("Usage: python PNGWhiteTrim.py ../someFolder padding")
-        sys.exit(1)
-    
-    filePaths = glob.glob(path) #search for all png images in the folder
-    
-    if len(filePaths) == 0:
-        print("No files detected!")
-    
-    for filePath in filePaths:
-        image=Image.open(filePath)
-        image.load()
-        imageSize = image.size
-    
-        # remove alpha channel
-        invert_im = image.convert("RGB")
-    
-        # invert image (so that white is 0)
-        invert_im = ImageOps.invert(invert_im)
-        imageBox = invert_im.getbbox()
-        imageBox = tuple(np.asarray(imageBox)+padding)
-
-        print(imageBox,imageSize)
-
-        if pad_type=='y-only':
-            imageBox=(0,imageBox[1],imageSize[0],imageBox[3])
-    
-        cropped=image.crop(imageBox)
-        print(filePath, "Size:", imageSize, "New Size:", imageBox)
-        cropped.save(filePath)
+#from PIL import Image,ImageOps # pip install Pillow
+#import glob
+#def crop(path, in_padding=1,pad_type='all',**kwargs):
+#    Image.MAX_IMAGE_PIXELS = None
+#    
+#    try:
+#        padding = int(in_padding)
+#        padding = np.asarray([-1*padding, -1*padding, padding, padding])
+#    except :
+#        print("Usage: python PNGWhiteTrim.py ../someFolder padding")
+#        sys.exit(1)
+#    
+#    filePaths = glob.glob(path) #search for all png images in the folder
+#    
+#    if len(filePaths) == 0:
+#        print("No files detected!")
+#    
+#    for filePath in filePaths:
+#        image=Image.open(filePath)
+#        image.load()
+#        imageSize = image.size
+#    
+#        # remove alpha channel
+#        invert_im = image.convert("RGB")
+#    
+#        # invert image (so that white is 0)
+#        invert_im = ImageOps.invert(invert_im)
+#        imageBox = invert_im.getbbox()
+#        imageBox = tuple(np.asarray(imageBox)+padding)
+#
+#        print(imageBox,imageSize)
+#
+#        if pad_type=='y-only':
+#            imageBox=(0,imageBox[1],imageSize[0],imageBox[3])
+#    
+#        cropped=image.crop(imageBox)
+#        print(filePath, "Size:", imageSize, "New Size:", imageBox)
+#        cropped.save(filePath)
 
 def expand_xr_longitudes(inds,periodic_add=70):
     # expand field for periodicity
@@ -390,18 +390,14 @@ def plot_fai(outpath,dt,init_dt,fignum,indata,name='Australia',model_name='GFS',
     plt.close('all') 
     #plt.show()
 
-def plot_precip6h(outpath,dt,init_dt,fignum,indata,name='Australia',model_name='GFS',dpi=150,**kwargs):
+def plot_precip6h(outpath,fignum,indata,name='Australia',model_name='GFS',dpi=150,save_type='local_file',**kwargs):
     
     plot_extent,centlon,figsize,barblength,proj,southern_hemisphere,regional_grid=get_domain_settings(name)
     data=indata.copy()
-    
-    for k in data.keys():
-        if k=='lats':
-            data[k]=data[k].sel(latitude=slice(plot_extent[3]+10,plot_extent[2]-5))
-        elif k=='lons':
-            None
-        else:
-            data[k]=data[k].sel(latitude=slice(plot_extent[3]+10,plot_extent[2]-5))
+    data=data.sel(latitude=slice(plot_extent[3]+10,plot_extent[2]-5))
+
+    init_dt = pd.Timestamp(data.analysis_time.item()).to_pydatetime()
+    dt = pd.Timestamp(data.valid_time.item()).to_pydatetime()
     
     dstr=dt.strftime('%Y%m%d_%H')
     dstr_long=dt.strftime('%H%M UTC %d %b %Y')
@@ -485,7 +481,7 @@ def plot_precip6h(outpath,dt,init_dt,fignum,indata,name='Australia',model_name='
     else:
         gl.xlabel_style = gl.ylabel_style ={'size': 8, 'color': 'black'}
     
-    plt.title('MSLP (black contours) | 10m Wind (arrows) | Precip (accumlated, shaded) \n'+model_name +' Forecast | Init: ' + dstr_init_long +' | Valid: '+dstr_long, 
+    plt.title('MSLP (black contours, hPa) | 10m Wind (barbs, kt) | Precip (accumlated, shaded) \n'+model_name +' Forecast | Init: ' + dstr_init_long +' | Valid: '+dstr_long, 
               fontsize=10)
     
     ax_pos=[0.25,0.12,0.5,0.015] #[left, bottom, width, height]
@@ -500,11 +496,18 @@ def plot_precip6h(outpath,dt,init_dt,fignum,indata,name='Australia',model_name='
              horizontalalignment='left', verticalalignment='bottom', 
              transform=ax.transAxes,
              bbox=dict(facecolor='white', alpha=0.95))
-
-    outfile=outpath+model_name+'_'+name+'_Precip6H_'+str(fignum)+'.jpg'
-    plt.savefig(outfile, dpi=dpi)
-    crop(outfile)
-    plt.close('all')
+    
+    if save_type=='GCS':
+        plt.savefig(outpath, format='png', bbox_inches='tight')
+        outpath.seek(0) # Rewind the buffer to the beginning
+        plottype='Precip6H'
+        figname=model_name+'_'+name+'_'+plottype+'_'+str(fignum)+'.jpg'
+        return outpath, fig, figname, plottype # Return the buffer and the figure
+    elif save_type=='local_file':
+        outfile=outpath+model_name+'_'+name+'_Precip6H_'+str(fignum)+'.jpg'
+        plt.savefig(outfile, dpi=dpi)
+        crop(outfile)
+        plt.close('all')
     gc.collect()
 
 def plot_LowVortPTE(outpath,dt,init_dt,fignum,indata,name='Australia',model_name='GFS',dpi=150,**kwargs):
@@ -756,19 +759,14 @@ def plot_QvectPTE(outpath,dt,init_dt,fignum,indata,name='Australia',model_name='
     plt.close('all')
     #plt.show()
 
-def plot_upper(outpath,dt,init_dt,fignum,indata,name='Australia',model_name='GFS',dpi=150,**kwargs):
+def plot_upper(outpath,fignum,indata,name='Australia',model_name='GFS',save_type='local_file',dpi=150,**kwargs):
     
     plot_extent,centlon,figsize,barblength,proj,southern_hemisphere,regional_grid=get_domain_settings(name)
     data=indata.copy()
-    
-    for k in data.keys():
-        print(k)
-        if k=='lats':
-            data[k]=data[k].sel(latitude=slice(plot_extent[3]+10,plot_extent[2]-5))
-        elif k=='lons':
-            None
-        else:
-            data[k]=data[k].sel(latitude=slice(plot_extent[3]+10,plot_extent[2]-5))
+    data=data.sel(latitude=slice(plot_extent[3]+10,plot_extent[2]-5))
+
+    init_dt = pd.Timestamp(data.analysis_time.item()).to_pydatetime()
+    dt = pd.Timestamp(data.valid_time.item()).to_pydatetime()
     
     dstr=dt.strftime('%Y%m%d_%H')
     dstr_long=dt.strftime('%H%M UTC %d %b %Y')
@@ -869,12 +867,21 @@ def plot_upper(outpath,dt,init_dt,fignum,indata,name='Australia',model_name='GFS
              horizontalalignment='left', verticalalignment='bottom', 
              transform=ax.transAxes,
              bbox=dict(facecolor='white', alpha=0.95))
-    
-    outfile=outpath+model_name+'_'+name+'_UpperLevel_'+str(fignum)+'.jpg'
-    plt.savefig(outfile, dpi=dpi)
-    crop(outfile,padding=30)
-    plt.close('all') 
-    gc.collect()
+
+    if save_type=='GCS':
+        plt.savefig(outpath, format='png', bbox_inches='tight')
+        outpath.seek(0) # Rewind the buffer to the beginning
+        plottype='UpperLevel'
+        figname=model_name+'_'+name+'_'+plottype+'_'+str(fignum)+'.jpg'
+        return outpath, fig, figname, plottype # Return the buffer and the figure
+    elif save_type=='local_file':
+        outfile=outpath+model_name+'_'+name+'_UpperLevel_'+str(fignum)+'.jpg'
+        plt.savefig(outpath, dpi=dpi)
+        crop(outfile,padding=30)
+        plt.close('all') 
+    #gc.collect()
+
+
     
 def plot_irrotPV(outpath,dt,init_dt,fignum,indata,name='Australia',model_name='GFS',dpi=150,**kwargs):
     
@@ -1005,18 +1012,14 @@ def plot_irrotPV(outpath,dt,init_dt,fignum,indata,name='Australia',model_name='G
     crop(outfile)
     plt.close('all') 
     
-def plot_IVT(outpath,dt,init_dt,fignum,indata,name='Australia',model_name='GFS',dpi=150,**kwargs):
+def plot_IVT(outpath,fignum,indata,name='Australia',model_name='GFS',dpi=150,save_type='GCS',**kwargs):
     
     plot_extent,centlon,figsize,barblength,proj,southern_hemisphere,regional_grid=get_domain_settings(name)
     data=indata.copy()
-    
-    for k in data.keys():
-        if k=='lats':
-            data[k]=data[k].sel(latitude=slice(plot_extent[3]+10,plot_extent[2]-5))
-        elif k=='lons':
-            None
-        else:
-            data[k]=data[k].sel(latitude=slice(plot_extent[3]+10,plot_extent[2]-5))
+    data=data.sel(latitude=slice(plot_extent[3]+10,plot_extent[2]-5))
+
+    init_dt = pd.Timestamp(data.analysis_time.item()).to_pydatetime()
+    dt = pd.Timestamp(data.valid_time.item()).to_pydatetime()
     
     dstr=dt.strftime('%Y%m%d_%H')
     dstr_long=dt.strftime('%H%M UTC %d %b %Y')
@@ -1109,11 +1112,18 @@ def plot_IVT(outpath,dt,init_dt,fignum,indata,name='Australia',model_name='GFS',
              horizontalalignment='left', verticalalignment='bottom', 
              transform=ax.transAxes,
              bbox=dict(facecolor='white', alpha=0.95),zorder=10)
-    
-    outfile=outpath+model_name+'_'+name+'_IVT_'+str(fignum)+'.jpg'
-    plt.savefig(outfile, dpi=dpi)
-    crop(outfile)
-    plt.close('all') 
+
+    if save_type=='GCS':
+        plt.savefig(outpath, format='png', bbox_inches='tight')
+        outpath.seek(0) # Rewind the buffer to the beginning
+        plottype='IVT'
+        figname=model_name+'_'+name+'_'+plottype+'_'+str(fignum)+'.jpg'
+        return outpath, fig, figname, plottype # Return the buffer and the figure
+    elif save_type=='local_file':
+        outfile=outpath+model_name+'_'+name+'_IVT_'+str(fignum)+'.jpg'
+        plt.savefig(outfile, dpi=dpi)
+        crop(outfile)
+        plt.close('all') 
     
 def plot_IPV(outpath,dt,init_dt,fignum,plot_level,indata,name='Australia',model_name='GFS',dpi=150,**kwargs):
     
@@ -1223,18 +1233,14 @@ def plot_IPV(outpath,dt,init_dt,fignum,plot_level,indata,name='Australia',model_
     crop(outfile)
     plt.close('all') 
 
-def plot_thickness(outpath,dt,init_dt,fignum,indata,name='Australia',model_name='GFS',dpi=150,**kwargs):
-
+def plot_thickness(outpath,fignum,indata,name='Australia',model_name='GFS',dpi=150,save_type='local_file',**kwargs):
+    
     plot_extent,centlon,figsize,barblength,proj,southern_hemisphere,regional_grid=get_domain_settings(name)
     data=indata.copy()
-    
-    for k in data.keys():
-        if k=='lats':
-            data[k]=data[k].sel(latitude=slice(plot_extent[3]+10,plot_extent[2]-5))
-        elif k=='lons':
-            None
-        else:
-            data[k]=data[k].sel(latitude=slice(plot_extent[3]+10,plot_extent[2]-5))
+    data=data.sel(latitude=slice(plot_extent[3]+10,plot_extent[2]-5))
+
+    init_dt = pd.Timestamp(data.analysis_time.item()).to_pydatetime()
+    dt = pd.Timestamp(data.valid_time.item()).to_pydatetime()
     
     dstr=dt.strftime('%Y%m%d_%H')
     dstr_long=dt.strftime('%H%M UTC %d %b %Y')
@@ -1255,13 +1261,15 @@ def plot_thickness(outpath,dt,init_dt,fignum,indata,name='Australia',model_name=
         plot_levels = np.arange(6,32,2)
         extend_cmap='max'
 
-    cmap = plt.cm.get_cmap('BuPu', len(plot_levels)+10)(range(10,len(plot_levels)+10))
+    cmap = plt.cm.get_cmap('YlOrRd', len(plot_levels)+5)(range(2,len(plot_levels)+2))
     if southern_hemisphere:
         cmap=cmap[::-1]
     cmap = ListedColormap(cmap)
+    
 
-    lon2d, lat2d = np.meshgrid(data['vort500'].longitude.values, data['vort500'].latitude.values)
-    cyclic_data, cyclic_lon2d, cyclic_lat2d = add_cyclic(data['vort500'].values, x=lon2d, y=lat2d)
+    lon2d, lat2d = np.meshgrid(data['vort500'].sel(latitude=slice(88,-88)).longitude.values, 
+                               data['vort500'].sel(latitude=slice(88,-88)).latitude.values)
+    cyclic_data, cyclic_lon2d, cyclic_lat2d = add_cyclic(data['vort500'].sel(latitude=slice(88,-88)).values, x=lon2d, y=lat2d)
     if not regional_grid:
         cf=ax.contourf(cyclic_lon2d, cyclic_lat2d, gaussian_filter(cyclic_data*1e5,sigma=2),levels=plot_levels,
                 norm=BoundaryNorm(plot_levels,len(plot_levels)),cmap=cmap,extend=extend_cmap,
@@ -1270,45 +1278,55 @@ def plot_thickness(outpath,dt,init_dt,fignum,indata,name='Australia',model_name=
         cf=ax.contourf(cyclic_lon2d, cyclic_lat2d, cyclic_data*1e5, levels=plot_levels,
                 norm=BoundaryNorm(plot_levels,len(plot_levels)),cmap=cmap,extend=extend_cmap,
                 transform=data_crs)
-    
+
     plot_levels = list(range(4000,6100,50))
     lon2d, lat2d = np.meshgrid(data['z500'].longitude.values, data['z500'].latitude.values)
     cyclic_data, cyclic_lon2d, cyclic_lat2d = add_cyclic(data['z500'].values, x=lon2d, y=lat2d)
     c=ax.contour(cyclic_lon2d, cyclic_lat2d, cyclic_data,
-                 levels=plot_levels,colors='black',
-                 linewidths=0.8,transform=data_crs)
-    
-    plot_levels = [-0.8,-0.7,-0.6,-0.5,-0.4,-0.3]
-    lon2d, lat2d = np.meshgrid(data['wMID'].longitude.values, data['wMID'].latitude.values)
-    cyclic_data, cyclic_lon2d, cyclic_lat2d = add_cyclic(data['wMID'].values, x=lon2d, y=lat2d)
-    c1=ax.contour(cyclic_lon2d, cyclic_lat2d, cyclic_data,
-                  levels=plot_levels,colors='darkorange',linewidths=0.8,linestyles='-',
-                  transform=data_crs)
-    
+                levels=plot_levels,colors='black',
+                linewidths=1.1,transform=data_crs)
+
+    fmt = '%i'
+    ax.clabel(c, c.levels, inline=True, fmt=fmt, fontsize=10, inline_spacing=0)
+
     plot_levels = list(range(546,700,6))
     lon2d, lat2d = np.meshgrid(data['thickness'].longitude.values, data['thickness'].latitude.values)
     cyclic_data, cyclic_lon2d, cyclic_lat2d = add_cyclic(data['thickness'].values, x=lon2d, y=lat2d)
     c=ax.contour(cyclic_lon2d, cyclic_lat2d, cyclic_data,
-                 levels=plot_levels,colors='red',linestyles='--',linewidths=1.5,
-                 transform=data_crs)
+                levels=plot_levels,colors='red',linestyles='--',linewidths=1.0,
+                transform=data_crs)
     fmt = '%i'
     ax.clabel(c, c.levels, inline=True, fmt=fmt, fontsize=10, inline_spacing=0)
+
     plot_levels = list(range(546-120,546,6))
     c=ax.contour(cyclic_lon2d, cyclic_lat2d, cyclic_data,
-                 levels=plot_levels,colors='blue',linestyles='--',linewidths=1.5,
-                 transform=data_crs)
+                levels=plot_levels,colors='deepskyblue',linestyles='--',linewidths=1.5,
+                transform=data_crs)
     fmt = '%i'
     ax.clabel(c, c.levels, inline=True, fmt=fmt, fontsize=10, inline_spacing=0)
-    
+
+    plot_levels = [-2,-1.,-0.8,-0.7,-0.6,-0.5,-0.4,-0.3]
+    lon2d, lat2d = np.meshgrid(data['wMID'].longitude.values, data['wMID'].latitude.values)
+    cyclic_data, cyclic_lon2d, cyclic_lat2d = add_cyclic(data['wMID'].values, x=lon2d, y=lat2d)
+    c1=ax.contour(cyclic_lon2d, cyclic_lat2d, cyclic_data,
+                levels=plot_levels,colors='blue',linewidths=0.8,linestyles='-',
+                transform=data_crs)
+
+    q=ax.barbs(data['u500'].longitude, data['u500'].latitude,  
+                        data['u500']*1.94384, data['v500']*1.94384, regrid_shape=15,
+                        length=5, fill_empty=True, pivot='middle',#flagcolor=[.3,.3,.3],barbcolor=[.3,.3,.3],
+                        sizes=dict(emptybarb=0.00, spacing=0.2, height=0.5),linewidth=0.75,
+                        transform=data_crs)
+
     ax.add_feature(LAND,facecolor='lightgrey')
     ax.coastlines(linewidths=0.4)
-    
+
     if not regional_grid:
         gl = ax.gridlines(crs=data_crs, draw_labels=True,
-                          linewidth=0.6, color='lightgrey', alpha=0.5, linestyle='--')
+                        linewidth=0.6, color='lightgrey', alpha=0.5, linestyle='--')
     else:
         gl = ax.gridlines(crs=data_crs, draw_labels=True, x_inline=False, 
-                          y_inline=False, linewidth=0.33, color='k',alpha=0.5)
+                        y_inline=False, linewidth=0.33, color='k',alpha=0.5)
     if not regional_grid:
         xlocators=list(np.arange(-180,190,30))
     else:
@@ -1324,16 +1342,16 @@ def plot_thickness(outpath,dt,init_dt,fignum,indata,name='Australia',model_name=
         gl.xlabel_style = gl.ylabel_style ={'size': 8, 'color': 'black','rotation': 0}
     else:
         gl.xlabel_style = gl.ylabel_style ={'size': 8, 'color': 'black'}
-    
-    plt.title('500-1000hPa Thickness (red/blue, dam) | 500hPa Cyc. Rel. Vort. (shading), GPH (black) | 400-700hPa Up. Vert. Vel. (orange)\n'+model_name +' Forecast | Init: ' + dstr_init_long +' | Valid: '+dstr_long, 
-              fontsize=10)
-    
+
+    plt.title('500 hPa cyc. rel. vort. (shading), geo. height (black, m), wind (barbs, kt)\n500-1000 hPa thickness (red/cyan, dam) | 400-700 hPa ascent (blue)\n'+model_name +' Reanalysis | Valid: '+dstr_long, 
+            fontsize=10)
+
     ax_pos=[0.25,0.12,0.5,0.015] #[left, bottom, width, height]
     fig=plt.gcf()
     cbar_ax = fig.add_axes(ax_pos)
     cb=fig.colorbar(cf,orientation="horizontal", cax=cbar_ax)
     cb.ax.tick_params(labelsize=8)
-    cb.set_label('Cyclonic Relative Vorticity [$10^{-5}$]', rotation=0, fontsize=8)
+    cb.set_label('Cyclonic Relative Vorticity [$10^{-5} s^{-1}$]', rotation=0, fontsize=8)
     
     copywrite_text='\xa9 Michael A. Barnes\nwww.weathermanbarnes.com'
     ax.text(0.01, 0.015, copywrite_text, fontsize=6, 
@@ -1341,11 +1359,18 @@ def plot_thickness(outpath,dt,init_dt,fignum,indata,name='Australia',model_name=
              transform=ax.transAxes,
              bbox=dict(facecolor='white', alpha=0.95),zorder=10)
 
-    outfile=outpath+model_name+'_'+name+'_Thickness_'+str(fignum)+'.jpg'
-    plt.savefig(outfile, dpi=dpi)
-    crop(outfile)
-    plt.close('all') 
-    #plt.show()
+    if save_type=='GCS':
+        plt.savefig(outpath, format='png', bbox_inches='tight')
+        outpath.seek(0) # Rewind the buffer to the beginning
+        plottype='Thickness'
+        figname=model_name+'_'+name+'_'+plottype+'_'+str(fignum)+'.jpg'
+        return outpath, fig, figname, plottype # Return the buffer and the figure
+    elif save_type=='local_file':
+        outfile=outpath+model_name+'_'+name+'_Thickness_'+str(fignum)+'.jpg'
+        plt.savefig(outfile, dpi=dpi)
+        crop(outfile)
+        plt.close('all') 
+        #plt.show()
 
 def plot_DT(outpath,dt,init_dt,fignum,indata,name='Australia',model_name='GFS',dpi=150,**kwargs):
     

@@ -1,0 +1,11 @@
+import multiprocessing
+import subprocess
+
+def run_script(timestep):
+    subprocess.run(["python", "weathermanbarnes_web/Forecasts/ops_scripts/ECMWF/get_ECMWF_eIFS_GCS.py", "20250709", "12", str(timestep)])
+
+if __name__ == "__main__":
+    timesteps = list(range(24,384,24))  # or any list of timesteps
+    with multiprocessing.Pool(processes=8):  # adjust number of processes
+        multiprocessing.Pool().map(run_script, timesteps)
+
