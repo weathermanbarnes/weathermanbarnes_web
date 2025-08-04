@@ -36,11 +36,11 @@ jobs:
       #    python -m pip install --upgrade pip
       #    pip install -r requirements.txt # Assuming you have a requirements.txt file
           
-      - name: Authenticate to Google Cloud
-        id: 'auth'
-        uses: 'google-github-actions/auth@v2'
-        with:
-          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+      #- name: Authenticate to Google Cloud
+      #  id: 'auth'
+      #  uses: 'google-github-actions/auth@v2'
+      #  with:
+      #    credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
       - name: Run the Python script
         run: |
