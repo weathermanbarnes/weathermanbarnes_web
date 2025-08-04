@@ -1,0 +1,47 @@
+name: Run CURL Script
+
+on:
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'Initial date for the run (YYYYMMDD)'
+        required: true
+        default: '20250803'
+      run_hour:
+        description: 'Initial run hour (0, 6, 12, 18)'
+        required: true
+        type: number
+        default: 12
+
+jobs:
+  run-python-script:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      GOOGLE_APPLICATION_CREDENTIALS_JSON: ${{ secrets.GCP_SA_KEY }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11' # or another version you need
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt # Assuming you have a requirements.txt file
+          
+      #- name: Authenticate to Google Cloud
+      #  id: 'auth'
+      #  uses: 'google-github-actions/auth@v2'
+      #  with:
+      #    credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      - name: Run the Python script
+        run: |
+          python run_curl.py ${{ github.event.inputs.date }} ${{ github.event.inputs.run_hour }}
