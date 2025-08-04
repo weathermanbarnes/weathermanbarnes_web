@@ -103,7 +103,7 @@ accum_precip = xr.concat(accum_precip,dim='time')
 valid_times=xr.concat(valid_times,dim='valid_time')
 accum_precip['time']=valid_times.values
 
-with open('weathermanbarnes_web/Forecasts/ops_scripts/city_metadata.pkl', 'rb') as handle:
+with open('Forecasts/ops_scripts/city_metadata.pkl', 'rb') as handle:
     city_dict = pickle.load(handle)
 
 rain_levels =  [0.2,0.5,1,2,5,15,20,25,30,35,40,45,50,60,70,80,90,100,125,150,200]
