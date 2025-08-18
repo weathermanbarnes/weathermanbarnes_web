@@ -37,5 +37,5 @@ COPY app.py .
 # Define the command to run your application
 # Cloud Run expects your application to listen on the port specified by the PORT environment variable.
 # We'll use gunicorn to serve a simple Flask app that triggers your plotting script.
-CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 app:app
+CMD exec gunicorn --bind :$PORT --workers 4 --threads 1 app:app
 

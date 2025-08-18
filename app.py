@@ -3,6 +3,7 @@
 # now configured to load ECMWF GRIB2 data directly from a Google Cloud Storage bucket.
 
 import os
+import uuid
 import sys
 import tempfile # For creating temporary files
 import shutil   # For cleaning up temporary directories
@@ -10,7 +11,6 @@ import io
 from flask import Flask, request, jsonify
 from google.cloud import storage # Still needed for other GCS operations like uploading plots
 
-# --- IMPORTANT: Set Matplotlib backend BEFORE importing pyplot ---
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -35,6 +35,50 @@ app = Flask(__name__)
 # Initialize Google Cloud Storage client
 storage_client = storage.Client()
 
+def delete_directory(path):
+    """
+    Deletes a directory and all of its contents.
+    
+    Args:
+        path (str): The path to the directory to be deleted.
+    """
+    if os.path.exists(path):
+        try:
+            shutil.rmtree(path)
+            print(f"Successfully deleted the directory: {path}")
+        except OSError as e:
+            print(f"Error: {path} : {e.strerror}")
+    else:
+        print(f"The directory {path} does not exist.")
+
+def replace_phrase_in_file(input_file_path, output_file_path, old_phrase, new_phrase):
+    try:
+        # Open the input file in read mode and read its content
+        with open(input_file_path, 'r') as file:
+            file_content = file.read()
+        
+        # Replace the old phrase with the new phrase
+        updated_content = file_content.replace(old_phrase, new_phrase)
+        
+        # Open the output file in write mode and write the updated content
+        with open(output_file_path, 'w') as file:
+            file.write(updated_content)
+        
+        #print("Replacement completed successfully. Updated file saved as", output_file_path)
+    
+    except Exception as e:
+        print(f"An error occurred in replacephrase in file function: {e}")
+
+# Create a single directory
+def create_directory(dir_name):
+    try:
+        os.mkdir(dir_name)
+        print(f"Directory '{dir_name}' created successfully.")
+    except FileExistsError:
+        print(f"Directory '{dir_name}' already exists.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
 def remove_temp_files(temp_dir):
     # Clean up the temporary directory and file
     if temp_dir and os.path.exists(temp_dir):
@@ -50,9 +94,29 @@ def set_cache_control(bucket_name, blob_name, cache_control_value):
     blob.cache_control = cache_control_value
     blob.patch()
 
-    print(f"Cache-Control for {blob_name} set to {cache_control_value}.")
+    #print(f"Cache-Control for {blob_name} set to {cache_control_value}.")
 
-def save_blob_to_bucket(img_buffer,output_bucket_name,output_blob_name):
+def upload_to_bucket(bucket_name, source_file_name, destination_blob_name):
+    """
+    Uploads a file to the bucket.
+    
+    Args:
+    bucket_name (str): Name of the bucket.
+    source_file_name (str): Path to the file to upload.
+    destination_blob_name (str): Name of the blob in the bucket.
+    """
+    # Initialize a storage client
+    storage_client = storage.Client()
+    # Get the bucket
+    bucket = storage_client.bucket(bucket_name)
+    # Create a blob object
+    blob = bucket.blob(destination_blob_name)
+    # Upload the file
+    blob.upload_from_filename(source_file_name)
+    
+    print(f"File {source_file_name} uploaded to {destination_blob_name}.")
+
+def save_blob_to_bucket(img_buffer,output_bucket_name,output_blob_name,cache_control='no-store'):
     # 3. Get the output bucket and upload the image
     output_bucket = storage_client.bucket(output_bucket_name)
     output_blob = output_bucket.blob(output_blob_name)
@@ -85,7 +149,15 @@ def load_required_ifs_data_from_gcs(bucket_name, blob_name, precip_data_blob):
     temp_dir = None
     temp_file_path = None
     try:
-        temp_dir = tempfile.mkdtemp()
+        #temp_dir = tempfile.mkdtemp()
+        temp_dir = os.path.join("/mnt/storage/tmp/",str(uuid.uuid4()))
+        #temp_dir = os.path.join("/Users/mbar0087/Downloads/",str(uuid.uuid4()))
+        try:
+            os.makedirs(temp_dir, exist_ok=True)
+            print(f"Directory created successfully at: {temp_dir}")
+        except OSError as e:
+            print(f"Error creating directory: {e}")
+        create_directory(temp_dir)
         temp_file_path = os.path.join(temp_dir, os.path.basename(blob_name))
 
         # Get the blob and download it to the temporary file
@@ -94,8 +166,9 @@ def load_required_ifs_data_from_gcs(bucket_name, blob_name, precip_data_blob):
         blob.download_to_filename(temp_file_path)
         print(f"Successfully downloaded {gcs_uri} to temporary file: {temp_file_path}")
 
-        temp_tp_dir = tempfile.mkdtemp()
-        temp_tp_file_path = os.path.join(temp_tp_dir, os.path.basename(precip_data_blob))
+        #temp_tp_dir = tempfile.mkdtemp()
+        #temp_tp_dir = temp_dir
+        temp_tp_file_path = os.path.join(temp_dir, os.path.basename(precip_data_blob))
 
         # Get the blob and download it to the temporary file
         bucket_tp = storage_client.bucket(bucket_name)
@@ -150,10 +223,10 @@ def load_required_ifs_data_from_gcs(bucket_name, blob_name, precip_data_blob):
         ds = xr.merge([mslp,u10,v10,t850,z500,u500,v500,spd300,ujet300,vjet300,jet300,wMID,tp,vort500,thickness,
                        z700,uIVT,vIVT,IVT])
         ds = ds.rename({'time':'analysis_time'})
-        print(ds)
+        ds=add_cyclic_to_dataset(ds)
 
-        print(f"Successfully loaded data from local temporary file using cfgrib.")
-        return ds, [temp_dir,temp_tp_dir]
+        #print(f"Successfully loaded data from local temporary file using cfgrib.")
+        return ds, temp_dir
     
     except Exception as e:
         # Log the full exception details
@@ -176,36 +249,31 @@ def generate_ecmwf_plot_and_save(ecmwf_data_bucket, ecmwf_data_blob, ecmwf_preci
     """
     try:
         # 1. Load ECMWF data from GCS
-        data_to_plot, temp_dirs = load_required_ifs_data_from_gcs(ecmwf_data_bucket, ecmwf_data_blob, ecmwf_precip_data_blob)
+        data_to_plot, temp_dir = load_required_ifs_data_from_gcs(ecmwf_data_bucket, ecmwf_data_blob, ecmwf_precip_data_blob)
 
         #names=['SH','Australia','SouthernAfrica','SouthAmerica','IndianOcean','NH','NorthAmerica','Europe','NorthAtlantic','Asia']
-        names=['Australia']
+        names=['SH','Australia','NH']
 
         for name in names:
-            # 2. Save the plot to a BytesIO object
 
-            img_buffer = io.BytesIO()
-            img_buffer, fig, figname, plottype = plot_IVT(img_buffer, fignum, data_to_plot, name=name, model_name='ECMWF-IFS', save_type='GCS', dpi=600)
+            img_buffer, figname, plottype = plot_IVT(io.BytesIO(), fignum, data_to_plot, name=name, model_name='ECMWF-IFS', save_type='GCS', dpi=300)
             bucket_dir=f'data/ECMWF/IFS/{name}/{plottype}/'
-            save_blob_to_bucket(img_buffer,output_bucket_name,f'{bucket_dir}{figname}'); plt.close(fig)
+            save_blob_to_bucket(img_buffer,output_bucket_name,f'{bucket_dir}{figname}')#; plt.close(fig)
 
-            img_buffer = io.BytesIO()
-            img_buffer, fig, figname, plottype = plot_thickness(img_buffer, fignum, data_to_plot, name=name, model_name='ECMWF-IFS', save_type='GCS', dpi=600)
+            img_buffer, figname, plottype = plot_thickness(io.BytesIO(), fignum, data_to_plot, name=name, model_name='ECMWF-IFS', save_type='GCS', dpi=300)
             bucket_dir=f'data/ECMWF/IFS/{name}/{plottype}/'
-            save_blob_to_bucket(img_buffer,output_bucket_name,f'{bucket_dir}{figname}'); plt.close(fig)
+            save_blob_to_bucket(img_buffer,output_bucket_name,f'{bucket_dir}{figname}')#; plt.close(fig)
 
-            img_buffer = io.BytesIO()
-            img_buffer, fig, figname, plottype = plot_upper(img_buffer, fignum, data_to_plot, name=name, model_name='ECMWF-IFS', save_type='GCS', dpi=600)
+            img_buffer, figname, plottype = plot_upper(io.BytesIO(), fignum, data_to_plot, name=name, model_name='ECMWF-IFS', save_type='GCS', dpi=300)
             bucket_dir=f'data/ECMWF/IFS/{name}/{plottype}/'
-            save_blob_to_bucket(img_buffer,output_bucket_name,f'{bucket_dir}{figname}'); plt.close(fig)
+            save_blob_to_bucket(img_buffer,output_bucket_name,f'{bucket_dir}{figname}')#; plt.close(fig)
 
-            img_buffer = io.BytesIO()
-            img_buffer, fig, figname, plottype = plot_precip6h(img_buffer, fignum, data_to_plot, name=name, model_name='ECMWF-IFS', save_type='GCS', dpi=600)
+            img_buffer, figname, plottype = plot_precip6h(io.BytesIO(), fignum, data_to_plot, name=name, model_name='ECMWF-IFS', save_type='GCS', dpi=300)
             bucket_dir=f'data/ECMWF/IFS/{name}/{plottype}/'
-            save_blob_to_bucket(img_buffer,output_bucket_name,f'{bucket_dir}{figname}'); plt.close(fig)
+            save_blob_to_bucket(img_buffer,output_bucket_name,f'{bucket_dir}{figname}')#; plt.close(fig)
 
-        for temp_dir in temp_dirs:
-            remove_temp_files(temp_dir)
+        #for temp_dir in temp_dirs:
+        delete_directory(temp_dir)
         
         return True, f"gs://{output_bucket_name}/{figname}"
     
@@ -224,18 +292,28 @@ def handle_generate_plot():
     - 'fignum': fignum
     """
     data = request.get_json()
-    if not data or 'ecmwf_data_bucket' not in data or 'ecmwf_data_blob' not in data or 'ecmwf_precip_data_blob' not in data \
+    if not data or 'init_date' not in data or 'ecmwf_data_bucket' not in data or 'ecmwf_data_blob' not in data or 'ecmwf_precip_data_blob' not in data \
                  or 'output_bucket_name' not in data or 'fignum' not in data:
         return jsonify({
             "error": "Missing one or more required parameters: 'ecmwf_data_bucket', 'ecmwf_data_blob', 'ecmwf_precip_data_blob', 'output_bucket_name', or 'fignum'."
         }), 400
 
+    init_date = data['init_date']
     ecmwf_data_bucket = data['ecmwf_data_bucket']
     ecmwf_data_blob = data['ecmwf_data_blob']
     ecmwf_precip_data_blob = data['ecmwf_precip_data_blob']
     output_bucket_name = data['output_bucket_name']
     fignum = data['fignum']
 
+    ################### Add the new html file to the website  ###################
+    input_html_path = 'weathermanbarnes_web/default_web/'+'forecast_IFS_default.html' 
+    output_html_file = 'forecast_IFS.html'
+    output_html_path = 'weathermanbarnes_web/default_web/'+output_html_file
+    init_date_replace_phrase = 'DREFDREFDREF'
+    replace_phrase_in_file(input_html_path, output_html_path, init_date_replace_phrase, init_date)
+    upload_to_bucket(output_bucket_name, output_html_path, output_html_file)
+
+    ################### Do the plotting and add it to the website ###################
     success, result_message = generate_ecmwf_plot_and_save(
         ecmwf_data_bucket, ecmwf_data_blob, ecmwf_precip_data_blob, output_bucket_name, fignum
     )

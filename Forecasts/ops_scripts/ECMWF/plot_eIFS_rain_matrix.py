@@ -74,7 +74,7 @@ inrun=indatetime.strftime('%H%M')
 indate=indatetime.strftime('%Y%m%d')
 
 plot_extent=[100,170,-50,-5]
-trange=range(24,360+24,24)
+trange=range(36,361,24)
 accum_precip=[]
 valid_times=[]
 for it,t in enumerate(tqdm(trange, total=len(trange))):
