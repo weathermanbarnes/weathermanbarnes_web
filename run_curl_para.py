@@ -83,7 +83,7 @@ def process_tstep(tstep, indatetime, server_run):
         ]
 
     try:
-        result = subprocess.run(command, capture_output=True, text=True, check=True)
+        result = subprocess.run(command, capture_output=True, text=True, check=True, timeout=1200)
         print(f"Curl command for tstep {tstep} executed successfully!")
         print("STDOUT:")
         print(result.stdout)
