@@ -25,6 +25,7 @@ def process_tstep(tstep, indatetime, server_run):
 
         command = [
             "curl",
+            "--max-time", "600",
             "-s",
             "-X",
             "POST",
@@ -63,6 +64,7 @@ def process_tstep(tstep, indatetime, server_run):
 
         command = [
             "curl",
+            "--max-time", "600",
             "-s",
             "-X",
             "POST",

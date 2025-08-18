@@ -79,15 +79,15 @@ accum_precip=[]
 valid_times=[]
 for it,t in enumerate(tqdm(trange, total=len(trange))):
     accum_precip_t=[]
-    for ii,i in enumerate(range(ens_length+1)):
+    for ii,i in enumerate(range(1,ens_length+1)):
         fpath = outpath+"data/"
-        fn=fpath+indate+inrun+'00-'+str(t)+'h-enfo-ef_tp_sfc_'+str(i)+'.grib2'
+        fn=fpath+indate+inrun+'00-'+str(t)+'h-aifs-enfo-pf_tp_sfc_'+str(i)+'.grib2'
         prcp=xr.open_dataset(fn,engine='cfgrib',decode_timedelta=True)
 
         if t==24:
             prcp24=prcp*1
         else:
-            fn0=fpath+indate+inrun+'00-'+str(t-24)+'h-enfo-ef_tp_sfc_'+str(i)+'.grib2'
+            fn0=fpath+indate+inrun+'00-'+str(t-24)+'h-aifs-enfo-pf_tp_sfc_'+str(i)+'.grib2'
             prcp0=xr.open_dataset(fn0,engine='cfgrib',decode_timedelta=True)
             prcp24=prcp-prcp0
 
@@ -131,7 +131,7 @@ for plot_name in loc_sets.keys():
         
         accum_precip_loc=accum_precip.sel(latitude=inlat,longitude=inlon,method='nearest')
         
-        masked_data=np.transpose(accum_precip_loc.tp.values)*1000
+        masked_data=np.transpose(accum_precip_loc.tp.values)#*1000
         masked_data=np.vstack([masked_data, np.mean(masked_data,axis=0)])
         masked_data = np.ma.masked_where(masked_data < 0.2, masked_data)
         ax.imshow(masked_data,cmap=cmap,norm=norm)#vmin=0.2,vmax=800)
@@ -154,7 +154,7 @@ for plot_name in loc_sets.keys():
         for friday in fridays:
             ax.axvline(x=friday+0.5, color="black", linestyle="--", linewidth=0.75, alpha=1)
             
-        ax.axhline(y=51-0.5, color="black", linestyle="-", linewidth=3, alpha=1)
+        ax.axhline(y=50-0.5, color="black", linestyle="-", linewidth=3, alpha=1)
 
         
         ensname=np.hstack([accum_precip_loc.number.values.astype('<U4'),np.array('Mean')])
@@ -168,9 +168,9 @@ for plot_name in loc_sets.keys():
         
         ax.set_title(loc+' ('+state+')')
     
-    fig.suptitle('24hr Precipitation Forecast for '+plot_name+' [mm] | ECMWF-eIFS | Init: ' + dstr_init_long ,y=0.935,fontsize=20)
+    fig.suptitle('24hr Precipitation Forecast for '+plot_name+' [mm] | ECMWF-AIFS | Init: ' + dstr_init_long ,y=0.935,fontsize=20)
     
-    outfile=outpath+'images/ECMWF-eIFS_Rain_'+plot_name.replace(" ", "")+'.jpg'
+    outfile=outpath+'images/ECMWF-AIFS_Rain_'+plot_name.replace(" ", "")+'.jpg'
     plt.savefig(outfile, dpi=300)
     crop(outfile,in_padding=10)
 #plt.show()
