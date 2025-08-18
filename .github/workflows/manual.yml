@@ -44,4 +44,4 @@ jobs:
 
       - name: Run the Python script
         run: |
-          python run_curl.py ${{ github.event.inputs.date }} ${{ github.event.inputs.run_hour }}
+          python run_curl_para.py ${{ github.event.inputs.date }} ${{ github.event.inputs.run_hour }}
