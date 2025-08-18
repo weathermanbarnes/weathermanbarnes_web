@@ -12,3 +12,4 @@ datetime
 python-dateutil
 cartopy
 scipy
+tqdm
