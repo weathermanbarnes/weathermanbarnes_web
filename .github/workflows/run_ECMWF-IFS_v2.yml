@@ -1,0 +1,38 @@
+name: Run ECMWF-IFS
+
+on:
+  schedule:
+    # This cron expression schedules the workflow to run every day at 00:00 UTC.
+    - cron: '50 20 * * *'
+
+jobs:
+  run-python-script:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      GOOGLE_APPLICATION_CREDENTIALS_JSON: ${{ secrets.GCP_SA_KEY }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Calculate Today's Date
+        id: date_calculator
+        run: echo "today=$(date -u +'%Y%m%d')" >> $GITHUB_OUTPUT
+
+      - name: Run the Python script
+        run: |
+          python run_curl_para.py ${{ steps.date_calculator.outputs.today }} 12
+          
