@@ -121,7 +121,8 @@ if __name__ == '__main__':
     server_run = "https://ecmwf-plot-service-dfsedjpfbq-uc.a.run.app/generate-plot"
 
     # Create a list of all the tstep values you want to process
-    tsteps_to_process = list(range(-24, 246, 6))#246, 6))
+    #tsteps_to_process = list(range(-24, 246, 6))#246, 6))
+    tsteps_to_process = list(range(-24, 24, 6)) #[0,6,12,18]
 
     # Determine the number of processes to use.
     # It's often a good practice to use the number of CPU cores available.
