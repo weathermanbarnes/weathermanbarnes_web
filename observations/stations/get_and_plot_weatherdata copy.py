@@ -66,8 +66,7 @@ def set_cache_control(bucket_name, blob_name, cache_control_value):
     print(f"Cache-Control for {blob_name} set to {cache_control_value}.")
 
 #outpath='/scratch/w40/mb0427/Forecasts/obs/'
-outpath='/mnt/storage/data/OBS/station/'
-archive_path='/mnt/storage/archive/obs/stations/'
+outpath='/Users/mbar0087/Downloads/'
 numdays=7
 start_date=datetime.today()
 
@@ -103,7 +102,7 @@ for id in ['IDV60901.95936', 'IDS60901.94648', 'IDS60901.94672', 'IDV60901.94866
           'IDD60901.94120','IDW60901.94610']:
     id_split = id.split('.')
     bom_url = 'http://reg.bom.gov.au/fwo/'+id_split[0]+'/'+id+'.axf'
-    bom_csv = archive_path+id+".csv"
+    bom_csv = outpath+id+".csv"
     r = requests.get(bom_url)
     f = open(bom_csv, "w")
     f.write(r.text)
@@ -124,7 +123,7 @@ for id in ['IDV60901.95936', 'IDS60901.94648', 'IDS60901.94672', 'IDV60901.94866
     first=True
     for dt in dt_list[::-1]:
         
-        bom_dt_csv=archive_path+id+"_"+dt.strftime('%Y%m%d')+".csv"
+        bom_dt_csv=outpath+id+"_"+dt.strftime('%Y%m%d')+".csv"
         if first:
             data = pd.read_csv(bom_dt_csv)
             first=False
@@ -386,7 +385,7 @@ for id in ['IDV60901.95936', 'IDS60901.94648', 'IDS60901.94672', 'IDV60901.94866
     outfile=outpath+outfn
     plt.savefig(outfile, dpi=300)
 
-    #destination_blob_name = "data/OBS/station/"+outfn
-    #upload_to_bucket(bucket_name, outfile, destination_blob_name)
-    #cache_control_value = "no-store"  # or "max-age=60"
-    #set_cache_control(bucket_name, destination_blob_name, cache_control_value)
+    destination_blob_name = "data/OBS/station/"+outfn
+    upload_to_bucket(bucket_name, outfile, destination_blob_name)
+    cache_control_value = "no-store"  # or "max-age=60"
+    set_cache_control(bucket_name, destination_blob_name, cache_control_value)

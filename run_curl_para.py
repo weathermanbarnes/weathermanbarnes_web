@@ -25,7 +25,7 @@ def process_tstep(tstep, indatetime, server_run):
 
         command = [
             "curl",
-            "--max-time", "600",
+            "--max-time", "1800",
             "-s",
             "-X",
             "POST",
@@ -64,7 +64,7 @@ def process_tstep(tstep, indatetime, server_run):
 
         command = [
             "curl",
-            "--max-time", "600",
+            "--max-time", "1800",
             "-s",
             "-X",
             "POST",
@@ -83,7 +83,7 @@ def process_tstep(tstep, indatetime, server_run):
         ]
 
     try:
-        result = subprocess.run(command, capture_output=True, text=True, check=True, timeout=1200)
+        result = subprocess.run(command, capture_output=True, text=True, check=True, timeout=1800)
         print(f"Curl command for tstep {tstep} executed successfully!")
         print("STDOUT:")
         print(result.stdout)
@@ -121,11 +121,12 @@ if __name__ == '__main__':
     server_run = "https://ecmwf-plot-service-dfsedjpfbq-uc.a.run.app/generate-plot"
 
     # Create a list of all the tstep values you want to process
-    tsteps_to_process = list(range(-24, 246, 6))#246, 6))
+    #tsteps_to_process = list(range(-24, 246, 6))#246, 6))
+    tsteps_to_process = list(range(-24, 24, 6)) #[0,6,12,18]
 
     # Determine the number of processes to use.
     # It's often a good practice to use the number of CPU cores available.
-    num_processes = 2#os.cpu_count() or 4 # Default to 4 if not available
+    num_processes = 4#os.cpu_count() or 4 # Default to 4 if not available
 
     # Use a 'with' statement for the Pool to ensure processes are cleaned up properly
     with Pool(processes=num_processes) as pool:
