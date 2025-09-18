@@ -1,0 +1,15 @@
+Flask
+gunicorn
+google-cloud-storage
+numpy
+matplotlib
+xarray
+netCDF4
+pandas
+cfgrib
+metpy
+datetime
+python-dateutil
+cartopy
+scipy
+tqdm

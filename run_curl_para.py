@@ -125,7 +125,7 @@ if __name__ == '__main__':
 
     # Determine the number of processes to use.
     # It's often a good practice to use the number of CPU cores available.
-    num_processes = 4#os.cpu_count() or 4 # Default to 4 if not available
+    num_processes = 8#os.cpu_count() or 4 # Default to 4 if not available
 
     # Use a 'with' statement for the Pool to ensure processes are cleaned up properly
     with Pool(processes=num_processes) as pool:

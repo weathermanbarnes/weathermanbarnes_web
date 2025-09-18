@@ -4,7 +4,7 @@
 import pandas as pd
 import requests
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from dateutil.relativedelta import relativedelta
 import numpy as np
 import xarray as xr
@@ -65,11 +65,11 @@ def set_cache_control(bucket_name, blob_name, cache_control_value):
 
     print(f"Cache-Control for {blob_name} set to {cache_control_value}.")
 
-#outpath='/scratch/w40/mb0427/Forecasts/obs/'
+#outpath=archive_path='/Users/mbar0087/Downloads/'
 outpath='/mnt/storage/data/OBS/station/'
 archive_path='/mnt/storage/archive/obs/stations/'
 numdays=7
-start_date=datetime.today()
+start_date=datetime.now(timezone.utc) + relativedelta(hours=10)
 
 ################################################################################################################################
 ################################################################################################################################
@@ -115,7 +115,7 @@ for id in ['IDV60901.95936', 'IDS60901.94648', 'IDS60901.94672', 'IDV60901.94866
 
     for dt in list(data['local_datetimes'].dt.date.unique())[0:3]:
         dt_data = data[data['local_datetimes'].dt.date == pd.to_datetime(dt).date()]
-        dt_data.to_csv(outpath+id+'_'+dt.strftime('%Y%m%d')+'.csv')
+        dt_data.to_csv(archive_path+id+'_'+dt.strftime('%Y%m%d')+'.csv')
     
     dt_list=generate_date_times(start_date-relativedelta(days=numdays),
                                    start_date,

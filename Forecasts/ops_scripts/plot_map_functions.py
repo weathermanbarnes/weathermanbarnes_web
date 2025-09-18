@@ -1141,28 +1141,25 @@ def plot_IVT(outpath,fignum,indata,name='Australia',model_name='GFS',dpi=150,sav
         crop(outfile)
         plt.close(fig) # Changed plt.close('all') to plt.close(fig)
     
-def plot_IPV(outpath,dt,init_dt,fignum,plot_level,indata,name='Australia',model_name='GFS',dpi=150,**kwargs):
-    
+def plot_IPV(outpath,fignum,indata,plot_level,name='Australia',model_name='GFS',save_type='local_file',dpi=150,**kwargs):
+
     plot_extent,centlon,figsize,barblength,proj,southern_hemisphere,regional_grid=get_domain_settings(name)
     data=indata.copy()
-    
-    for k in data.keys():
-        if k=='lats':
-            data[k]=data[k].sel(latitude=slice(plot_extent[3]+10,plot_extent[2]-5))
-        elif k=='lons' or k=='levs':
-            None
-        else:
-            data[k]=data[k].sel(latitude=slice(plot_extent[3]+10,plot_extent[2]-5))
+    data=data.sel(latitude=slice(89,-89)).sel(latitude=slice(plot_extent[3]+10,plot_extent[2]-5),
+                  longitude=slice(plot_extent[0]-15,plot_extent[1]+15))
+
+    init_dt = pd.Timestamp(data.analysis_time.item()).to_pydatetime()
+    dt = pd.Timestamp(data.valid_time.item()).to_pydatetime()
     
     dstr=dt.strftime('%Y%m%d_%H')
     dstr_long=dt.strftime('%H%M UTC %d %b %Y')
     dstr_init_long=init_dt.strftime('%H%M UTC %d %b %Y')
     
-    fig=plt.figure(figsize=figsize)
     data_crs=ccrs.PlateCarree()
-    
-    ax=plt.axes(projection=proj)
+    fig, ax = plt.subplots(1,1,figsize=figsize, subplot_kw={'projection': proj})
+
     ax.set_extent(plot_extent,crs=data_crs)
+    
     if not regional_grid:
         ax.set_boundary(map_circle, transform=ax.transAxes)
 
@@ -1180,28 +1177,26 @@ def plot_IPV(outpath,dt,init_dt,fignum,plot_level,indata,name='Australia',model_
         #pv_cmap = np.concatenate((pv_cmap,plt.cm.get_cmap('Greys', 255)(range(0,1))))
         pv_cmap = ListedColormap(pv_cmap[::-1])
         PVextend='max'
-
-    lon2d, lat2d = np.meshgrid(data['pv'+str(plot_level)].longitude.values, data['pv'+str(plot_level)].latitude.values)
-    cyclic_data, cyclic_lon2d, cyclic_lat2d = add_cyclic(data['pv'+str(plot_level)].values, x=lon2d, y=lat2d)
-    cf=plt.contourf(cyclic_lon2d, cyclic_lat2d, gaussian_filter(cyclic_data/1e-6,sigma=1),
+    
+    cf=ax.contourf(data[f'pv{plot_level}k'].longitude.values, data[f'pv{plot_level}k'].latitude.values, 
+                    gaussian_filter(data[f'pv{plot_level}k']/1e-6,sigma=1),
                     levels=pv_clevs,cmap=pv_cmap,norm=BoundaryNorm(pv_clevs,len(pv_clevs)),
                     transform=data_crs,extend=PVextend)
-    c=ax.contour(cyclic_lon2d, cyclic_lat2d, gaussian_filter(cyclic_data/1e-6,sigma=1),
+    c=ax.contour(data[f'pv{plot_level}k'].longitude.values, data[f'pv{plot_level}k'].latitude.values, 
+                 gaussian_filter(data[f'pv{plot_level}k']/1e-6,sigma=1),
                  levels=pv_clevs[0:-1],colors='grey',linewidths=0.4,linestyles='-',
                  transform=data_crs)
     
     if not regional_grid:
-        lon2d, lat2d = np.meshgrid(data['u'+str(plot_level)].longitude.values, data['u'+str(plot_level)].latitude.values)
-        cyclic_u, cyclic_lon2d, cyclic_lat2d = add_cyclic(data['u'+str(plot_level)].values, x=lon2d, y=lat2d)
-        cyclic_v, cyclic_lon2d, cyclic_lat2d = add_cyclic(data['v'+str(plot_level)].values, x=lon2d, y=lat2d)
-        q=ax.quiver(cyclic_lon2d, cyclic_lat2d, cyclic_u, cyclic_v,
-                    angles="xy", transform=data_crs, regrid_shape=40)
+        regrid_shape=25
     else:
-        expanded_u=expand_xr_longitudes(data['u'+str(plot_level)],periodic_add=60)
-        expanded_v=expand_xr_longitudes(data['v'+str(plot_level)],periodic_add=60)
-        q=plt.quiver(expanded_u.longitude, expanded_u.latitude, expanded_u, expanded_v,
-                     regrid_shape=22,scale=135e-6,scale_units='xy',width=0.004,#minshaft=2,#minlength=2,
-                     transform=data_crs)
+        regrid_shape=15
+    q=ax.barbs(data[f'u{plot_level}k'].longitude.values, data[f'u{plot_level}k'].latitude.values,  
+                        data[f'u{plot_level}k']*1.94384, data[f'v{plot_level}k']*1.94384, regrid_shape=regrid_shape,
+                        length=5, fill_empty=True, pivot='middle',
+                        sizes=dict(emptybarb=0.00, spacing=0.2, height=0.5),linewidth=0.75,
+                        transform=data_crs)
+    
     
     ax.add_feature(LAND,facecolor='lightgrey')
     ax.coastlines(linewidths=0.4)
@@ -1227,6 +1222,38 @@ def plot_IPV(outpath,dt,init_dt,fignum,plot_level,indata,name='Australia',model_
         gl.xlabel_style = gl.ylabel_style ={'size': 8, 'color': 'black','rotation': 0}
     else:
         gl.xlabel_style = gl.ylabel_style ={'size': 8, 'color': 'black'}
+
+    ax.set_title(str(plot_level)+'K PV (shaded) and wind (barbs, kt)\n'+model_name +' Forecast | Init: ' + dstr_init_long +' | Valid: '+dstr_long,
+            fontsize=10)
+
+    ax_pos=[0.25,0.12,0.5,0.015] #[left, bottom, width, height]
+    ##fig=plt.gcf()
+    cbar_ax = fig.add_axes(ax_pos)
+    cb=fig.colorbar(cf,orientation="horizontal", cax=cbar_ax)
+    cb.ax.tick_params(labelsize=8)
+    cb.set_label('Potential Vorticity [PVU]', rotation=0, fontsize=8)
+    
+    copywrite_text='\xa9 Michael A. Barnes\nwww.weathermanbarnes.com'
+    ax.text(0.01, 0.015, copywrite_text, fontsize=6, 
+             horizontalalignment='left', verticalalignment='bottom', 
+             transform=ax.transAxes,
+             bbox=dict(facecolor='white', alpha=0.95),zorder=10)
+
+    if save_type=='GCS':
+        outpath = io.BytesIO()  # Create a new, unique in-memory buffer
+        fig.savefig(outpath, format='png', bbox_inches='tight', dpi=dpi) # Changed plt.savefig to fig.savefig
+        outpath.seek(0)
+        plottype='IPV-'+str(plot_level)+'K'
+        figname=model_name+'_'+name+'_'+plottype+'_'+str(fignum)+'.jpg'
+        plt.close(fig) # <-- Add this line to correctly close the figure
+        gc.collect()
+        return outpath, figname, plottype
+    elif save_type=='local_file':
+        outfile=outpath+model_name+'_'+name+'_IPV-'+str(plot_level)+'K_'+str(fignum)+'.jpg'
+        fig.savefig(outfile, dpi=dpi)
+        crop(outfile)
+        plt.close(fig) 
+        #plt.show()
 
     plt.title(str(plot_level)+'K PV (shaded) and wind (quivers)\n'+model_name +' Forecast | Init: ' + dstr_init_long +' | Valid: '+dstr_long,
               fontsize=10)
