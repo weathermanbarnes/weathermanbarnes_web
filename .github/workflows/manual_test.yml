@@ -1,0 +1,30 @@
+name: "Manual plot run"
+on:
+  # This section enables manual triggering of the workflow from the 'Actions' tab in GitHub
+  workflow_dispatch:
+    # Optional: You can define inputs that the user can provide when manually triggering
+    # inputs:
+    #   logLevel:
+    #     description: 'Log level'
+    #     required: true
+    #     default: 'warning'
+    #     type: choice
+    #     options:
+    #       - info
+    #       - warning
+    #       - debug
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "$(date +'%Y-%m-%d %H:%M:%S')"
+      - name: Checkout repository
+        ### Latest at time of writing
+        uses: actions/checkout@v3.3.0
+      - name: Trigger plot generation via Cloud Run
+        run: |
+          curl -s -X POST https://ens-plot-service-924830121748.us-central1.run.app/trigger-plot-job
