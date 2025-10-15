@@ -4,7 +4,7 @@
 import pandas as pd
 import requests
 import os
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 import numpy as np
 import xarray as xr
@@ -65,118 +65,10 @@ def set_cache_control(bucket_name, blob_name, cache_control_value):
 
     print(f"Cache-Control for {blob_name} set to {cache_control_value}.")
 
-outpath=archive_path='/Users/mbar0087/Downloads/'
-#outpath='/mnt/storage/data/OBS/station/'
-#archive_path='/mnt/storage/archive/obs/stations/'
+#outpath='/scratch/w40/mb0427/Forecasts/obs/'
+outpath='/Users/mbar0087/Downloads/'
 numdays=7
-start_date=datetime.now(timezone.utc) + relativedelta(hours=10)
-#start_date=datetime(2025,9,23,15)
-
-################################################################################################################################
-################################################################################################################################
-################################################################################################################################
-daily=False
-if daily:
-    if datetime.now(timezone.utc).hour > 0: #== 7:
-        ydt=start_date-relativedelta(days=1)
-        yesterday_obs=[]
-        for id in ['IDCJDW3033', #Melbourne City
-                'IDCJDW2124', #Sydney City
-                'IDCJDW2801', #Canberra
-                'IDCJDW4019', #Brisbane City
-                'IDCJDW5081', #Adelaide City
-                'IDCJDW6111', #Perth City
-                'IDCJDW7021', #Hobart City
-                'IDCJDW8014', #Darwin
-                ]:
-            df=[]
-            for m in [-1,0]:
-                dt=ydt+relativedelta(months=m)
-                url = f'ftp://ftp.bom.gov.au/anon/gen/clim_data/IDCKWCDEA0/tables/vic/{id}-{dt.strftime("%Y%m")}.csv'
-                try:
-                    # Get the content from the URL
-                    response = requests.get(url)
-                    response.raise_for_status()  # Check for HTTP errors
-
-                    # Split the text content into a list of lines
-                    lines = response.text.splitlines()
-                    first_empty_line = None
-                    empty_line_index = -1
-
-                    for i, line in enumerate(lines):
-                        # The .strip() method removes leading and trailing whitespace
-                        # so it finds lines that are completely empty or just have spaces/tabs.
-                        if not line.strip():
-                            first_empty_line = line
-                            empty_line_index = i
-                            break # Exit the loop after finding the first one
-
-                    station_name = lines[0]
-                except requests.exceptions.RequestException as e:
-                    print(f"An error occurred: {e}")
-                
-                station_name=station_name.split("Daily Weather Observations for ")[1].split(" for ")[0].replace('"','')
-                state_name=station_name.split(", ")[1]
-                station_name=station_name.split(", ")[0]
-
-                df.append(pd.read_csv(url,skiprows=empty_line_index+1,encoding='latin-1'))
-            df=pd.concat(df, ignore_index=True).reset_index()
-            df=df.drop(['Unnamed: 0','index'], axis=1)
-
-            ydtstr=ydt.strftime('%Y-%m')+f"-{ydt.day}"
-            indtstr=start_date.strftime('%Y-%m')+f"-{start_date.day}"
-            df_temp=df[(df['Date']==ydtstr)].reset_index(drop=True)
-            df_temp["Rainfall (mm)"]=df[(df['Date']==indtstr)].reset_index(drop=True).loc[0]["Rainfall (mm)"]
-            df_temp['Station']=station_name
-            df_temp['State']=state_name
-            yesterday_obs.append(df_temp)
-        yesterday_obs=pd.concat(yesterday_obs, ignore_index=True).reset_index(drop=True)
-
-
-    # 1. Create the DataFrame
-    weather_df = yesterday_obs[["Station","Rainfall (mm)","Maximum temperature (°C)"]].set_index('Station')
-
-    # 2. Prepare the data for Matplotlib table
-    data = weather_df.values
-    rows = weather_df.index
-    columns = weather_df.columns
-
-    # 3. Create a figure and axis for the plot
-    fig, ax = plt.subplots(figsize=(6, 4))
-    ax.axis('off')  # Turn off the axis to show only the table
-
-    # 4. Create the table object
-    table = ax.table(cellText=np.round(data, 2), 
-                    rowLabels=rows, 
-                    colLabels=columns, 
-                    loc='center')
-
-    # 5. Apply custom styling to the table
-    table.auto_set_font_size(False)
-    table.set_fontsize(12)
-    table.scale(1.2, 1.2)
-
-    # Manually find and color the max values in each column
-    for col_idx, col_name in enumerate(columns):
-        max_row_idx = weather_df[col_name].idxmax()
-        min_row_idx = weather_df[col_name].idxmin()
-        
-        if col_name == "Rainfall (mm)":
-            color='lightgreen'
-        else:
-            color='lightcoral'
-        table[weather_df.index.get_loc(max_row_idx) + 1, col_idx].set_facecolor(color)
-        table[weather_df.index.get_loc(max_row_idx) + 1, col_idx].set_text_props(weight='bold')
-        if col_name != "Rainfall (mm)":
-            table[weather_df.index.get_loc(min_row_idx) + 1, col_idx].set_facecolor('lightblue')
-            table[weather_df.index.get_loc(min_row_idx) + 1, col_idx].set_text_props(weight='bold')
-
-    # 6. Set the title of the table
-    ax.set_title(f"Daily Observations for Capital City Stations\nValid: {ydt.strftime('%Y-%m-%d')}\n[Rainfall accumulated from 09h00 {ydt.strftime('%Y-%m-%d')} to 09h00 {start_date.strftime('%Y-%m-%d')}]", fontsize=12, weight='bold')
-
-    # 7. Save the figure to a file
-    plt.savefig(outpath+"capital_observations.jpg", bbox_inches='tight', dpi=150)
-    weather_df.to_csv(outpath+'capital_observations.csv')
+start_date=datetime.today()
 
 ################################################################################################################################
 ################################################################################################################################
@@ -201,15 +93,16 @@ if daily:
 #        dt_data.to_csv(outpath+id+'_'+dt.strftime('%Y%m%d')+'.csv')
 
 ################################################################################################################################
+#IDV60901.95867
 # Get data and plot (operations)
-for id in []:#'IDV60901.95936', 'IDS60901.94648', 'IDS60901.94672', 'IDV60901.94866',
-          #'IDT60901.94619','IDN60903.94926','IDN60901.94767','IDQ60901.94576',
+for id in ['IDV60901.95936', 'IDS60901.94648', 'IDS60901.94672', 'IDV60901.94866',
+          'IDT60901.94619','IDN60903.94926','IDN60901.94767','IDQ60901.94576',
           #'IDV60901.95867',
-          #'IDV60901.94870','IDT60901.94970','IDV60901.94864','IDQ60801.94287',
-          #'IDD60901.94120','IDW60901.94610']:
+          'IDV60901.94870','IDT60901.94970','IDV60901.94864','IDQ60801.94287',
+          'IDD60901.94120','IDW60901.94610']:
     id_split = id.split('.')
     bom_url = 'http://reg.bom.gov.au/fwo/'+id_split[0]+'/'+id+'.axf'
-    bom_csv = archive_path+id+".csv"
+    bom_csv = outpath+id+".csv"
     r = requests.get(bom_url)
     f = open(bom_csv, "w")
     f.write(r.text)
@@ -221,7 +114,7 @@ for id in []:#'IDV60901.95936', 'IDS60901.94648', 'IDS60901.94672', 'IDV60901.94
 
     for dt in list(data['local_datetimes'].dt.date.unique())[0:3]:
         dt_data = data[data['local_datetimes'].dt.date == pd.to_datetime(dt).date()]
-        dt_data.to_csv(archive_path+id+'_'+dt.strftime('%Y%m%d')+'.csv')
+        dt_data.to_csv(outpath+id+'_'+dt.strftime('%Y%m%d')+'.csv')
     
     dt_list=generate_date_times(start_date-relativedelta(days=numdays),
                                    start_date,
@@ -230,7 +123,7 @@ for id in []:#'IDV60901.95936', 'IDS60901.94648', 'IDS60901.94672', 'IDV60901.94
     first=True
     for dt in dt_list[::-1]:
         
-        bom_dt_csv=archive_path+id+"_"+dt.strftime('%Y%m%d')+".csv"
+        bom_dt_csv=outpath+id+"_"+dt.strftime('%Y%m%d')+".csv"
         if first:
             data = pd.read_csv(bom_dt_csv)
             first=False
@@ -298,7 +191,6 @@ for id in []:#'IDV60901.95936', 'IDS60901.94648', 'IDS60901.94672', 'IDV60901.94
 
     data['dewpt'][data['dewpt']==-9999.0]=np.nan
     data['air_temp'][data['air_temp']==-9999.0]=np.nan
-    
     date_times = pd.to_datetime(data['local_datetimes'])
     df = pd.DataFrame({'datetime': date_times, 'air_temp': data['air_temp']})
     tmax = df.loc[df.groupby(df['datetime'].dt.date)['air_temp'].idxmax()]
@@ -376,7 +268,6 @@ for id in []:#'IDV60901.95936', 'IDS60901.94648', 'IDS60901.94672', 'IDV60901.94
                  ha='center', va='top', fontweight='bold', zorder=1e2)
     
     ######################## Plot Press/Dir ########################
-    data['press_msl'][data['press_msl']==-9999.0]=np.nan
     ax2.plot(data['local_datetimes'],data['press_msl'],color='green')
     ax2.tick_params(axis='y', labelcolor='green')
     ax2.set_ylabel('MSLP [hPa]', color='green')
@@ -494,7 +385,7 @@ for id in []:#'IDV60901.95936', 'IDS60901.94648', 'IDS60901.94672', 'IDV60901.94
     outfile=outpath+outfn
     plt.savefig(outfile, dpi=300)
 
-    #destination_blob_name = "data/OBS/station/"+outfn
-    #upload_to_bucket(bucket_name, outfile, destination_blob_name)
-    #cache_control_value = "no-store"  # or "max-age=60"
-    #set_cache_control(bucket_name, destination_blob_name, cache_control_value)
+    destination_blob_name = "data/OBS/station/"+outfn
+    upload_to_bucket(bucket_name, outfile, destination_blob_name)
+    cache_control_value = "no-store"  # or "max-age=60"
+    set_cache_control(bucket_name, destination_blob_name, cache_control_value)

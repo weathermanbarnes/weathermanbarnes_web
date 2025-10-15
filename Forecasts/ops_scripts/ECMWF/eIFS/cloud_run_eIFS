@@ -1,0 +1,176 @@
+#!/bin/bash
+
+# This script automates the deployment of your ECMWF plotting application
+# to Google Cloud Run and optionally sets up a daily Cloud Scheduler job.
+
+# IMPORTANT:
+# 1. Ensure you have the Google Cloud SDK installed and authenticated (`gcloud auth login`).
+# 2. Place this script in the same directory as your Dockerfile, app.py, and requirements.txt.
+# 3. REPLACE ALL PLACEHOLDER VALUES BELOW with your actual Google Cloud details.
+
+# --- Configuration Variables (REPLACE THESE) ---
+export GCP_PROJECT_ID="diesel-air-405712" # e.g., "my-project-123456"
+export GCS_PLOT_BUCKET="www.weathermanbarnes.com" # e.g., "my-ecmwf-plots-2025"
+export CLOUD_RUN_SERVICE_NAME="ecmwf-plot-service"
+export CLOUD_RUN_REGION="australia-southeast2" # Ensure this matches your GCS bucket region
+export DOCKER_IMAGE_NAME="ecmwf-plot-generator"
+export DOCKER_IMAGE_TAG="latest"
+
+# For Cloud Scheduler (if you enable Step 7)
+# export ECMWF_DATA_INPUT_BUCKET="your-ecmwf-data-input-bucket" # e.g., "ecmwf-raw-data"
+# export ECMWF_DATA_INPUT_BLOB="path/to/your/ecmwf_forecast_data_$(date +\%Y\%m\%d).nc" # e.g., "forecasts/hres_$(date +\%Y\%m\%d).nc"
+# export CLOUD_SCHEDULER_JOB_NAME="daily-ecmwf-plot-job"
+# export CLOUD_SCHEDULER_CRON_SCHEDULE="0 6 * * *" # Every day at 6 AM UTC. Adjust as needed.
+
+# --- Step 2: Google Cloud Project Setup and Authentication ---
+echo "--- Step 2: Google Cloud Project Setup and Authentication ---"
+echo "Setting Google Cloud Project ID to: ${GCP_PROJECT_ID}"
+gcloud config set project "${GCP_PROJECT_ID}"
+
+echo "Authenticating with Google Cloud (browser window may open)..."
+gcloud auth login
+gcloud auth application-default login
+
+echo "Enabling necessary Google Cloud APIs..."
+gcloud services enable run.googleapis.com storage.googleapis.com cloudscheduler.googleapis.com
+echo "APIs enabled."
+
+# --- Step 3: Create a Google Cloud Storage Bucket (if you don't have one) ---
+echo "--- Step 3: Creating Google Cloud Storage Bucket (if it doesn't exist) ---"
+echo "Attempting to create bucket: gs://${GCS_PLOT_BUCKET} in region ${CLOUD_RUN_REGION}"
+gsutil mb -l "${CLOUD_RUN_REGION}" "gs://${GCS_PLOT_BUCKET}" || echo "Bucket already exists or creation failed (check permissions)."
+echo "Bucket check complete."
+
+# --- Step 4: Build and Push Your Docker Image to Google Container Registry ---
+echo "--- Step 4: Building and Pushing Docker Image ---"
+export FULL_IMAGE_NAME="gcr.io/${GCP_PROJECT_ID}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
+echo "Building and pushing Docker image: ${FULL_IMAGE_NAME}"
+gcloud builds submit --tag "${FULL_IMAGE_NAME}" .
+if [ $? -ne 0 ]; then
+    echo "ERROR: Docker image build or push failed. Exiting."
+    exit 1
+fi
+echo "Docker image built and pushed successfully."
+
+# --- Step 5: Deploy Your Application to Google Cloud Run ---
+echo "--- Step 5: Deploying Application to Google Cloud Run ---"
+echo "Deploying Cloud Run service: ${CLOUD_RUN_SERVICE_NAME} in region ${CLOUD_RUN_REGION}"
+gcloud run deploy "${CLOUD_RUN_SERVICE_NAME}" \
+  --image "${FULL_IMAGE_NAME}" \
+  --platform managed \
+  --region "${CLOUD_RUN_REGION}" \
+  --allow-unauthenticated \
+  --set-env-vars BUCKET_NAME="${GCS_PLOT_BUCKET}" # This env var is now less critical as bucket names are in payload, but can be a default.
+
+if [ $? -ne 0 ]; then
+    echo "ERROR: Cloud Run deployment failed. Exiting."
+    exit 1
+fi
+
+export CLOUD_RUN_SERVICE_URL=$(gcloud run services describe "${CLOUD_RUN_SERVICE_NAME}" --platform managed --region "${CLOUD_RUN_REGION}" --format="value(status.url)")
+echo "Cloud Run service deployed. Service URL: ${CLOUD_RUN_SERVICE_URL}"
+
+# --- Step 6: Configure IAM Permissions for Your Cloud Run Service Account ---
+echo "--- Step 6: Configuring IAM Permissions ---"
+export CLOUD_RUN_SERVICE_ACCOUNT_EMAIL=$(gcloud run services describe "${CLOUD_RUN_SERVICE_NAME}" --platform managed --region "${CLOUD_RUN_REGION}" --format="value(spec.template.spec.serviceAccountName)")
+echo "Cloud Run Service Account: ${CLOUD_RUN_SERVICE_ACCOUNT_EMAIL}"
+
+echo "Granting Storage Object Creator role to service account on bucket: gs://${GCS_PLOT_BUCKET}"
+gsutil iam ch "serviceAccount:${CLOUD_RUN_SERVICE_ACCOUNT_EMAIL}:objectCreator" "gs://${GCS_PLOT_BUCKET}"
+if [ $? -ne 0 ]; then
+    echo "WARNING: Failed to grant Storage Object Creator role. Please check permissions manually."
+fi
+echo "IAM permissions configured."
+
+# --- Step 7 (Optional): Set Up Google Cloud Scheduler for Daily Automation ---
+# echo "--- Step 7 (Optional): Setting Up Google Cloud Scheduler ---"
+# echo "If you want to skip this step for manual testing, press Ctrl+C now."
+# read -p "Press Enter to continue with Cloud Scheduler setup, or Ctrl+C to skip."
+# 
+# echo "Creating Cloud Scheduler job: ${CLOUD_SCHEDULER_JOB_NAME}"
+# gcloud scheduler jobs create http "${CLOUD_SCHEDULER_JOB_NAME}" \
+#     --schedule "${CLOUD_SCHEDULER_CRON_SCHEDULE}" \
+#     --uri "${CLOUD_RUN_SERVICE_URL}/generate-plot" \
+#     --http-method POST \
+#     --message-body '{
+#         "ecmwf_data_bucket": "'"${ECMWF_DATA_INPUT_BUCKET}"'",
+#         "ecmwf_data_blob": "'"${ECMWF_DATA_INPUT_BLOB}"'",
+#         "output_bucket_name": "'"${GCS_PLOT_BUCKET}"'",
+#         "output_blob_name": "ecmwf_plot_$(date +\\%Y\\%m\\%d).png"
+#     }' \
+#     --headers "Content-Type=application/json" \
+#     --location "${CLOUD_RUN_REGION}" \
+#     --oauth-service-account-email "${CLOUD_RUN_SERVICE_ACCOUNT_EMAIL}" \
+#     --oauth-token-scope https://www.googleapis.com/auth/cloud-platform
+# 
+# if [ $? -ne 0 ]; then
+#     echo "ERROR: Cloud Scheduler job creation failed."
+# else
+#     echo "Cloud Scheduler job created successfully."
+# fi
+
+# --- Manual Test (Alternative to Step 7 for a single run) ---
+echo "--- Manual Test: Triggering Cloud Run Service (for single run testing) ---"
+echo "You can run this command anytime to manually trigger your service."
+echo "Triggering Cloud Run service at: ${CLOUD_RUN_SERVICE_URL}/generate-plot"
+
+curl -X POST -H "Content-Type: application/json" \
+     -d '{
+         "ecmwf_data_bucket": "ecmwf-open-data",
+         "ecmwf_data_blob": "20250723/12z/ifs/0p25/oper/20250723120000-0h-oper-fc.grib2",
+         "output_bucket_name": "www.weathermanbarnes.com",
+         "fignum": 0
+     }' \
+     "${CLOUD_RUN_SERVICE_URL}/generate-plot"
+
+echo "Script execution complete."
+
+
+
+
+#############
+
+export GCP_PROJECT_ID="diesel-air-405712" 
+export GCS_PLOT_BUCKET="www.weathermanbarnes.com" 
+export CLOUD_RUN_SERVICE_NAME="ens-plot-service"
+export CLOUD_RUN_REGION="us-central1"
+export DOCKER_IMAGE_NAME="ens-plot-generator"
+export DOCKER_IMAGE_TAG="latest"
+
+# --- Step 4: Build and Push Your Docker Image to Google Container Registry ---
+echo "--- Step 4: Building and Pushing Docker Image ---"
+export FULL_IMAGE_NAME="gcr.io/${GCP_PROJECT_ID}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
+echo "Building and pushing Docker image: ${FULL_IMAGE_NAME}"
+gcloud builds submit --tag "${FULL_IMAGE_NAME}" .
+
+# --- Step 5: Deploy Your Application to Google Cloud Run ---
+echo "--- Step 5: Deploying Application to Google Cloud Run ---"
+echo "Deploying Cloud Run service: ${CLOUD_RUN_SERVICE_NAME} in region ${CLOUD_RUN_REGION}"
+gcloud run deploy "${CLOUD_RUN_SERVICE_NAME}" \
+  --image "${FULL_IMAGE_NAME}" \
+  --platform managed \
+  --region "${CLOUD_RUN_REGION}" \
+  --allow-unauthenticated \
+  --set-env-vars BUCKET_NAME="${GCS_PLOT_BUCKET}" 
+
+export CLOUD_RUN_SERVICE_URL=$(gcloud run services describe "${CLOUD_RUN_SERVICE_NAME}" --platform managed --region "${CLOUD_RUN_REGION}" --format="value(status.url)")
+echo "Cloud Run service deployed. Service URL: ${CLOUD_RUN_SERVICE_URL}"
+
+# --- Step 6: Configure IAM Permissions for Your Cloud Run Service Account ---
+echo "--- Step 6: Configuring IAM Permissions ---"
+export CLOUD_RUN_SERVICE_ACCOUNT_EMAIL=$(gcloud run services describe "${CLOUD_RUN_SERVICE_NAME}" --platform managed --region "${CLOUD_RUN_REGION}" --format="value(spec.template.spec.serviceAccountName)")
+echo "Cloud Run Service Account: ${CLOUD_RUN_SERVICE_ACCOUNT_EMAIL}"
+
+echo "Granting Storage Object Creator role to service account on bucket: gs://${GCS_PLOT_BUCKET}"
+gsutil iam ch "serviceAccount:${CLOUD_RUN_SERVICE_ACCOUNT_EMAIL}:objectCreator" "gs://${GCS_PLOT_BUCKET}"
+
+echo "IAM permissions configured."
+
+gcloud run services update ${CLOUD_RUN_SERVICE_NAME} --memory 1Gi --cpu 1 --region us-central1 --platform managed --timeout 600
+
+gcloud run services update ${CLOUD_RUN_SERVICE_NAME} \
+--region us-central1 \
+--add-volume=name=storage-volume,type=cloud-storage,bucket=www.weathermanbarnes.com \
+--add-volume-mount=volume=storage-volume,mount-path=/mnt/storage \
+--add-volume=name=open-data-volume,type=cloud-storage,bucket=ecmwf-open-data \
+--add-volume-mount=volume=open-data-volume,mount-path=/mnt/ecmwf-data

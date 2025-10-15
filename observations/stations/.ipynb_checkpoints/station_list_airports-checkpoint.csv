@@ -1,0 +1,59 @@
+State,Town,Airport,Notes,State ID,Station ID,Daily Name
+NSW,Albury,Albury Airport,,IDN60801,95896,albury_airport
+NSW,Armidale,Armidale Airport,,IDN60801,95773,armidale_airport
+NSW,Ballina,Ballina Byron Gateway Airport,,IDN60801,94596,ballina_airport
+NSW,Broken Hill,Broken Hill Airport,,IDN60801,94691,broken_hill_airport
+NSW,Coffs Harbour,Coffs Harbour Airport,,IDN60801,95729,coffs_harbour_airport
+NSW,Cooma,Cooma-Snowy Mountains Airport,Seasonal,IDN60801,94921,cooma_airport
+NSW,Dubbo,Dubbo Airport,,IDN60801,,dubbo_airport
+NSW,Moree,Moree Airport,,IDN60801,,moree_aero
+NSW,Newcastle,Newcastle Airport,,IDN60801,,williamtown_raaf
+NSW,Orange,Orange Airport,,IDN60801,,orange_airport
+NSW,Port Macquarie,Port Macquarie Airport,,IDN60801,,port_macquarie_airport
+NSW,Sydney,Sydney Airport,Hub,IDN60801,,sydney_airport_amo
+NSW,Tamworth,Tamworth Airport,,IDN60801,,tamworth_airport
+NSW,Wagga Wagga,Wagga Wagga Airport,,IDN60801,,wagga_wagga_amo
+NT,Uluru,Uluru,,,,yulara_airport
+NT,Alice Springs,Alice Springs Airport,,,,alice_springs_airport
+NT,Darwin,Darwin International Airport,Focus city,,,darwin_airport
+QLD,Blackall,Blackall Airport,,,,blackall_airport
+QLD,Brisbane,Brisbane Airport,Hub,,,brisbane_aero
+QLD,Bundaberg,Bundaberg Airport,,,,bundaberg_aero
+QLD,Cairns,Cairns Airport,Focus city,,,cairns_aero
+QLD,Cloncurry,Cloncurry Airport,,,,cloncurry_airport
+QLD,Emerald,Emerald Airport,,,,emerald_airport
+QLD,Gladstone,Gladstone Airport,,,,gladstone_airport
+QLD,Gold Coast,Gold Coast Airport,,,,coolangatta
+QLD,Hamilton Island,Hamilton Island Airport,,,,hamilton_island_airport
+QLD,Hervey Bay,Hervey Bay Airport,,,,hervey_bay_airport
+QLD,Horn Island,Horn Island Airport,,,,horn_island
+QLD,Longreach,Longreach Airport,,,,longreach_aero
+QLD,Mackay,Mackay Airport,,,,mackay_aero
+QLD,Mount Isa,Mount Isa Airport,,,,mount_isa_aero
+QLD,Moranbah,Moranbah Airport,,,,moranbah_airport
+QLD,Proserpine,Whitsunday Coast Airport,,,,proserpine_airport
+QLD,Rockhampton,Rockhampton Airport,,,,rockhampton_aero
+QLD,Sunshine Coast,Sunshine Coast Airport,,,,sunshine_coast_airport
+QLD,Toowoomba,Toowoomba Wellcamp Airport,,,,toowoomba_airport
+QLD,Townsville,Townsville Airport,,,,townsville_aero
+QLD,Weipa,Weipa Airport,,,,weipa_aero
+SA,Adelaide,Adelaide Airport,Focus city,,,adelaide_airport
+SA,Kangaroo Island,Kingscote Airport,,,,kingscote_aero
+SA,Whyalla,Whyalla Airport,,,,whyalla_aero
+TAS,Burnie,Burnie Airport,,,,wynyard_airport
+TAS,Devonport,Devonport Airport,,,,devonport_airport
+TAS,Hobart,Hobart Airport,Focus city,,,hobart_airport
+TAS,Launceston,Launceston Airport,,,,launceston_airport
+VIC,Bendigo,Bendigo Airport,,,,bendigo_airport
+VIC,Melbourne,Melbourne Airport,Hub,,,melbourne_airport
+VIC,Mildura,Mildura Airport,,,,mildura_airport
+WA,Broome,Broome International Airport,,,,broome_airport
+WA,Busselton,Busselton Airport,,,,busselton_aero
+WA,Exmouth,Learmonth Airport,,,,learmonth_airport
+WA,Geraldton,Geraldton Airport,,,,geraldton_airport
+WA,Kalgoorlie,Kalgoorlie-Boulder Airport,,,,kalgoorlie-boulder_airport
+WA,Karratha,Karratha Airport,,,,karratha_aero
+WA,Newman,Newman Airport,,,,newman_aero
+WA,Paraburdoo,Paraburdoo Airport,,,,paraburdoo_aero
+WA,Perth,Perth Airport,Hub,,,perth_airport
+WA,Port Hedland,Port Hedland International Airport,,,,port_hedland_airport
