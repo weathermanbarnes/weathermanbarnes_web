@@ -34,7 +34,7 @@ jobs:
           passphrase: ${{ secrets.GADI_KEY_PASSPHRASE }}
           script: |
             cd /home/565/mb0427/gdata-gb02/Website/Forecasts/ops_scripts/ECMWF/
-            ./run_ECMWF-IFS.sh
+            ./run_ECMWF_IFS.PBS
 #./download_files.sh
 #./submit.PBS 
 #./reorganise_files.s
