@@ -15,7 +15,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 240
     steps:
       - name: Get current date
         id: date
@@ -26,15 +26,15 @@ jobs:
       - name: Download data and create fields
         uses: appleboy/ssh-action@v0.1.7
         with:
-          command_timeout: 200m # Times out after n minutes
+          command_timeout: 239m # Times out after n minutes
           debug: True
           host: gadi.nci.org.au
           username: ${{ secrets.GADI_USER }}
           key: ${{ secrets.GADI_KEY }}
           passphrase: ${{ secrets.GADI_KEY_PASSPHRASE }}
           script: |
-            cd /home/565/mb0427/Forecasts/
-            ./get_and_plot_weatherdata.sh
+            cd /home/565/mb0427/gdata-gb02/Website/Forecasts/ops_scripts/ECMWF/
+            ./run_ECMWF-IFS.sh
 #./download_files.sh
 #./submit.PBS 
 #./reorganise_files.s
