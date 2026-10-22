@@ -46,7 +46,7 @@ jobs:
                       time=12,                # Explicitly looking for the 12Z run
                       step=12,               # Your forecast step requirement
                       stream='enfo',          
-                      type='fc',              
+                      type='ef',              
                       target='latest_eifs.grib'
                   )
                   print('Successfully detected and downloaded the latest 12Z run data!')
