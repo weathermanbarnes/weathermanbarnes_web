@@ -2,7 +2,7 @@ name: "TEST ECMWF-IFS 12Z"
 
 on:
   schedule:
-    ### Starts early (e.g., 18:30 UTC) to actively wait for the 12Z data release window
+    ### Starts early (e.g., 18:30 UTC) to actively poll for the 12Z data release window
     - cron: '30 18 * * *'
   workflow_dispatch: # Allows manual execution from the GitHub Actions UI
 
@@ -19,36 +19,48 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install MQTT Client Tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y mosquitto-clients jq
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
 
-      - name: Wait for WIS2 12Z Signal
-        id: wait_for_data
+      - name: Install ECMWF Client
+        run: pip install ecmwf-opendata
+
+      - name: Poll and Fetch Latest 12Z Data
         timeout-minutes: 120 # Failsafe constraint: kills the run if 12Z doesn't arrive within 2 hours
         run: |
-          echo "Connecting to WIS2 Global Broker..."
-          echo "Subscribed and idling for the ECMWF 12Z Run notification..."
-          
-          # Subscribing specifically to the 12Z forecast cycle route
-          RAW_PAYLOAD=$(mosquitto_sub \
-            -h "gb.wis.cma.cn" \
-            -p 8883 \
-            -u "everyone" \
-            -P "everyone" \
-            -t "cache/a/wis2/int-ecmwf/data/core/weather/prediction/forecast/medium-range/deterministic/grib2/latitude-longitude/12/#" \
-            -C 1)
-            
-          echo "12Z Signal received successfully!"
-          
-          # Extracts the canonical URL path out of the notification object
-          DATA_URL=$(echo "$RAW_PAYLOAD" | jq -r '.links[] | select(.rel=="canonical").href')
-          echo "Target Data URL: $DATA_URL"
-          
-          # Exposing the URL to the environment matrix if your PBS script needs to parse it
-          echo "wis2_url=$DATA_URL" >> $GITHUB_OUTPUT
+          python -c "
+          import time
+          import sys
+          from ecmwf.opendata import Client
 
+          client = Client(source='ecmwf', model='ifs', resol='0p25')
+          
+          print('Starting live polling for the latest 12Z ECMWF-IFS data run...')
+          
+          while True:
+              try:
+                  # Pulls the 12 UTC run for the current operational date tracker
+                  client.retrieve(
+                      date=0,                 # 0 means 'today'. Change to -1 if checking for previous day.
+                      time=12,                # Explicitly looking for the 12Z run
+                      step=12,                # Your forecast step requirement
+                      stream='oper',          
+                      type='fc',              
+                      target='latest_ifs.grib'
+                  )
+                  print('Successfully detected and downloaded the latest 12Z run data!')
+                  break
+              except Exception as e:
+                  # If the 12Z run hasn't been uploaded yet, the API raises an error
+                  print(f'12Z data not ready yet. Retrying in 5 minutes... (Error context: {e})')
+                  time.sleep(300) # Sleep for 300 seconds (5 minutes)
+          "
+
+      # This keeps your original processing chain intact on your remote Gadi cluster
+      # now that the runner has verified the 12Z data is ready
+       Pentesting-and-automation
       - name: Download data and create fields
         uses: appleboy/ssh-action@v0.1.7
         with:
@@ -58,7 +70,6 @@ jobs:
           username: ${{ secrets.GADI_USER }}
           key: ${{ secrets.GADI_KEY }}
           passphrase: ${{ secrets.GADI_KEY_PASSPHRASE }}
-          # You can optionally pass the ${{ steps.wait_for_data.outputs.wis2_url }} to your script if required
           script: |
             cd /home/565/mb0427/gdata-gb02/Website/Forecasts/ops_scripts/ECMWF/
             ./run_ECMWF_IFS.PBS
