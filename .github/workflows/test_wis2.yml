@@ -1,42 +1,57 @@
-name: Poll ECMWF Open Data
+name: Wait for WIS2 Signal and Process
 
 on:
   schedule:
-    - cron: '*/30 * * * *' # Runs every 30 minutes
-  workflow_dispatch: # Allows you to trigger it manually from the UI
+    # Example: Fire this workflow early at 23:30 UTC so it is actively 
+    # listening before the expected 00:00 UTC data drops.
+    - cron: '30 23 * * *' 
+  workflow_dispatch: # Allows you to manually click "Run Workflow" to start waiting
 
 jobs:
-  check-and-download:
+  wait-and-execute:
     runs-on: ubuntu-latest
+    
     steps:
-      - name: Checkout repo
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Install ECMWF Client
-        run: pip install ecmwf-opendata
-
-      - name: Fetch Latest Data
+      - name: Install MQTT Client Tools
         run: |
-          python -c "
-          from ecmwf.opendata import Client
-          client = Client(source='ecmwf', model='ifs', resol='0p25') #
+          sudo apt-get update
+          sudo apt-get install -y mosquitto-clients jq
+
+      - name: Block and Wait for WIS2 MQTT Notification
+        id: wait_for_data
+        timeout-minutes: 180 # Automatically stops the runner if the data is delayed more than 3 hours
+        run: |
+          echo "Connecting to WIS2 Global Broker..."
+          echo "Waiting for data release notification..."
           
-          # This pulls the latest available runtime data down to your runner env
-          client.retrieve(
-              date=-1,                # Most recent day
-              time=0,                 # 00 UTC run
-              step=12,                # Forecast step
-              stream='oper',          # Operational stream
-              type='fc',              # Forecast type
-              target='latest_ifs.grib'
-          )
-          "
-      - name: Run Processing Scripts
+          # 1. mosquitto_sub connects to the public broker using WIS2 global credentials
+          # 2. '-C 1' forces the command to exit the moment exactly one message arrives
+          # 3. Replace the topic string below with your specific targeted WIS2 data channel
+          
+          RAW_PAYLOAD=$(mosquitto_sub \
+            -h "gb.wis.cma.cn" \
+            -p 8883 \
+            -u "everyone" \
+            -P "everyone" \
+            -t "cache/a/wis2/int-ecmwf/data/core/weather/prediction/forecast/medium-range/deterministic/#" \
+            -C 1)
+            
+          echo "Signal received successfully!"
+          
+          # Parse the canonical download link from the WIS2 Notification Message (WNM) JSON
+          DATA_URL=$(echo "$RAW_PAYLOAD" | jq -r '.links[] | select(.rel=="canonical").href')
+          
+          # Save the data URL to GitHub Action outputs for subsequent steps
+          echo "data_url=$DATA_URL" >> $GITHUB_OUTPUT
+
+      - name: Download & Process the Data
         run: |
-          echo "Processing downloaded file latest_ifs.grib..."
-          # Insert your processing execution steps here
+          echo "Beginning processing operations..."
+          echo "Target remote URL: ${{ steps.wait_for_data.outputs.data_url }}"
+          
+          # Proceed with your processing steps using the captured URL, e.g.:
+          # curl -O "${{ steps.wait_for_data.outputs.data_url }}"
+          # python run_models.py
