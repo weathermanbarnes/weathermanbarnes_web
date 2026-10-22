@@ -41,7 +41,7 @@ jobs:
           while True:
               try:
                   # Pulls the 12 UTC run for the current operational date tracker
-                  client.retrieve(
+                  client.catalogue(
                       date=0,                 # 0 means 'today'. Change to -1 if checking for previous day.
                       time=12,                # Explicitly looking for the 12Z run
                       step=12,               # Your forecast step requirement
