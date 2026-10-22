@@ -44,7 +44,7 @@ jobs:
                   client.retrieve(
                       date=0,                 # 0 means 'today'. Change to -1 if checking for previous day.
                       time=12,                # Explicitly looking for the 12Z run
-                      step=360,               # Your forecast step requirement
+                      step=12,               # Your forecast step requirement
                       stream='enfo',          
                       type='fc',              
                       target='latest_eifs.grib'
