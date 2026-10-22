@@ -1,18 +1,22 @@
-name: Wait for WIS2 Signal and Process
+name: "ECMWF-IFS 12Z" 
 
 on:
   schedule:
-    # Example: Fire this workflow early at 23:30 UTC so it is actively 
-    # listening before the expected 00:00 UTC data drops.
-    - cron: '30 23 * * *' 
-  workflow_dispatch: # Allows you to manually click "Run Workflow" to start waiting
+    ### Starts early (e.g., 18:30 UTC) to actively wait for the 12Z data release window
+    - cron: '30 18 * * *'
+  workflow_dispatch: # Allows manual execution from the GitHub Actions UI
 
 jobs:
-  wait-and-execute:
+  build:
     runs-on: ubuntu-latest
+    timeout-minutes: 240
     
     steps:
-      - name: Checkout Repository
+      - name: Get current date
+        id: date
+        run: echo "START_TIME=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
+
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Install MQTT Client Tools
@@ -20,38 +24,41 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y mosquitto-clients jq
 
-      - name: Block and Wait for WIS2 MQTT Notification
+      - name: Wait for WIS2 12Z Signal
         id: wait_for_data
-        timeout-minutes: 180 # Automatically stops the runner if the data is delayed more than 3 hours
+        timeout-minutes: 120 # Failsafe constraint: kills the run if 12Z doesn't arrive within 2 hours
         run: |
           echo "Connecting to WIS2 Global Broker..."
-          echo "Waiting for data release notification..."
+          echo "Subscribed and idling for the ECMWF 12Z Run notification..."
           
-          # 1. mosquitto_sub connects to the public broker using WIS2 global credentials
-          # 2. '-C 1' forces the command to exit the moment exactly one message arrives
-          # 3. Replace the topic string below with your specific targeted WIS2 data channel
-          
+          # Subscribing specifically to the 12Z forecast cycle route
           RAW_PAYLOAD=$(mosquitto_sub \
             -h "gb.wis.cma.cn" \
             -p 8883 \
             -u "everyone" \
             -P "everyone" \
-            -t "cache/a/wis2/int-ecmwf/data/core/weather/prediction/forecast/medium-range/deterministic/#" \
+            -t "cache/a/wis2/int-ecmwf/data/core/weather/prediction/forecast/medium-range/deterministic/grib2/latitude-longitude/12/#" \
             -C 1)
             
-          echo "Signal received successfully!"
+          echo "12Z Signal received successfully!"
           
-          # Parse the canonical download link from the WIS2 Notification Message (WNM) JSON
+          # Extracts the canonical URL path out of the notification object
           DATA_URL=$(echo "$RAW_PAYLOAD" | jq -r '.links[] | select(.rel=="canonical").href')
+          echo "Target Data URL: $DATA_URL"
           
-          # Save the data URL to GitHub Action outputs for subsequent steps
-          echo "data_url=$DATA_URL" >> $GITHUB_OUTPUT
+          # Exposing the URL to the environment matrix if your PBS script needs to parse it
+          echo "wis2_url=$DATA_URL" >> $GITHUB_OUTPUT
 
-      - name: Download & Process the Data
-        run: |
-          echo "Beginning processing operations..."
-          echo "Target remote URL: ${{ steps.wait_for_data.outputs.data_url }}"
-          
-          # Proceed with your processing steps using the captured URL, e.g.:
-          # curl -O "${{ steps.wait_for_data.outputs.data_url }}"
-          # python run_models.py
+      - name: Download data and create fields
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          command_timeout: 235m
+          debug: True
+          host: gadi.nci.org.au
+          username: ${{ secrets.GADI_USER }}
+          key: ${{ secrets.GADI_KEY }}
+          passphrase: ${{ secrets.GADI_KEY_PASSPHRASE }}
+          # You can optionally pass the ${{ steps.wait_for_data.outputs.wis2_url }} to your script if required
+          script: |
+            cd /home/565/mb0427/gdata-gb02/Website/Forecasts/ops_scripts/ECMWF/
+            ./run_ECMWF_IFS.PBS
