@@ -3,7 +3,7 @@ name: "ECMWF-eIFS 12Z"
 on:
   schedule:
     ### Starts early (e.g., 18:30 UTC) to actively poll for the 12Z data release window
-    - cron: '49 18 * * *'
+    - cron: '48 18 * * *'
   workflow_dispatch: # Allows manual execution from the GitHub Actions UI
 
 jobs:
