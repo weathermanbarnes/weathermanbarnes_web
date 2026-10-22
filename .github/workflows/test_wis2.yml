@@ -1,4 +1,4 @@
-name: "ECMWF-IFS 12Z" 
+name: "TEST ECMWF-IFS 12Z" 
 
 on:
   schedule:
