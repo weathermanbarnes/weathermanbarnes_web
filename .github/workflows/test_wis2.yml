@@ -58,9 +58,6 @@ jobs:
                   time.sleep(300) # Sleep for 300 seconds (5 minutes)
           "
 
-      # This keeps your original processing chain intact on your remote Gadi cluster
-      # now that the runner has verified the 12Z data is ready
-       Pentesting-and-automation
       - name: Download data and create fields
         uses: appleboy/ssh-action@v0.1.7
         with:
