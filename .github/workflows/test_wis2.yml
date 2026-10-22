@@ -1,0 +1,42 @@
+name: Poll ECMWF Open Data
+
+on:
+  schedule:
+    - cron: '*/30 * * * *' # Runs every 30 minutes
+  workflow_dispatch: # Allows you to trigger it manually from the UI
+
+jobs:
+  check-and-download:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install ECMWF Client
+        run: pip install ecmwf-opendata
+
+      - name: Fetch Latest Data
+        run: |
+          python -c "
+          from ecmwf.opendata import Client
+          client = Client(source='ecmwf', model='ifs', resol='0p25') #
+          
+          # This pulls the latest available runtime data down to your runner env
+          client.retrieve(
+              date=-1,                # Most recent day
+              time=0,                 # 00 UTC run
+              step=12,                # Forecast step
+              stream='oper',          # Operational stream
+              type='fc',              # Forecast type
+              target='latest_ifs.grib'
+          )
+          "
+      - name: Run Processing Scripts
+        run: |
+          echo "Processing downloaded file latest_ifs.grib..."
+          # Insert your processing execution steps here
