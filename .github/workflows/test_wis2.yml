@@ -3,13 +3,13 @@ name: "TEST ECMWF-IFS 12Z"
 on:
   schedule:
     ### Starts early (e.g., 18:30 UTC) to actively poll for the 12Z data release window
-    - cron: '30 18 * * *'
+    - cron: '39 17 * * *'
   workflow_dispatch: # Allows manual execution from the GitHub Actions UI
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 240
+    timeout-minutes: 360
     
     steps:
       - name: Get current date
@@ -28,7 +28,7 @@ jobs:
         run: pip install ecmwf-opendata
 
       - name: Poll and Fetch Latest 12Z Data
-        timeout-minutes: 120 # Failsafe constraint: kills the run if 12Z doesn't arrive within 2 hours
+        timeout-minutes: 240 # Failsafe constraint: kills the run if 12Z doesn't arrive within 2 hours
         run: |
           python -c "
           import time
@@ -61,7 +61,7 @@ jobs:
       - name: Download data and create fields
         uses: appleboy/ssh-action@v0.1.7
         with:
-          command_timeout: 235m
+          command_timeout: 181m
           debug: True
           host: gadi.nci.org.au
           username: ${{ secrets.GADI_USER }}
