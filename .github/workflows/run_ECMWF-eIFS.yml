@@ -41,12 +41,13 @@ jobs:
           while True:
               try:
                   # Pulls the 12 UTC run for the current operational date tracker
-                  client.catalogue(
+                  client.retrieve(
                       date=0,                 # 0 means 'today'. Change to -1 if checking for previous day.
                       time=12,                # Explicitly looking for the 12Z run
-                      step=12,               # Your forecast step requirement
+                      step=12,                # Your forecast step requirement
                       stream='enfo',          
-                      type='ef',              
+                      type='ef',
+                      param=['2t'], 
                       target='latest_eifs.grib'
                   )
                   print('Successfully detected and downloaded the latest 12Z run data!')
